@@ -3,6 +3,7 @@ import {Model} from "mongoose";
 import {User} from "../entities/user.entity";
 import {UserDocument} from "../entities/user.schema";
 import {UserMapper} from "../dto/mapper/user.mapper";
+import {UserLoginMapper} from "../dto/mapper/user-login.mapper";
 
 
 export class UserQueryRepo {
@@ -36,7 +37,7 @@ export class UserQueryRepo {
             return null;
         }
 
-        return UserMapper(user as UserDocument);
+        return UserLoginMapper(user as UserDocument);
     }
 
 }

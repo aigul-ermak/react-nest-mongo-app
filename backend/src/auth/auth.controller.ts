@@ -1,8 +1,9 @@
-import {Body, Controller, Delete, Get, HttpCode, Param, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, Param, Post, Req, Res} from '@nestjs/common';
 import {AuthService} from './auth.service';
-import {CreateAuthDto} from './dto/create-auth.dto';
 import {CreateUserDto} from "../user/dto/create-user.dto";
 import {UserService} from "../user/user.service";
+import {UserLoginDto} from "../user/dto/user-login.dto";
+import {Request, Response} from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -12,9 +13,27 @@ export class AuthController {
     ) {
     }
 
-    @Post()
-    create(@Body() createAuthDto: CreateAuthDto) {
-        // return this.authService.create(createAuthDto);
+    @Post('/login')
+    @HttpCode(200)
+    async login(@Body() loginDto: UserLoginDto,
+                @Req() req: Request,
+                @Res() res: Response) {
+
+        //const result = await this.authService.login(loginDto.loginOrEmail, loginDto.password);
+
+        const {
+            accessToken,
+            refreshToken
+        } = await this.authService.login(loginDto.loginOrEmail, loginDto.password);
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        return res.json({accessToken});
     }
 
     @Get()

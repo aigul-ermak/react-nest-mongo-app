@@ -1,9 +1,12 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
+import {BadRequestException, Injectable, UnauthorizedException} from '@nestjs/common';
 import {UpdateAuthDto} from './dto/update-auth.dto';
 import {CreateUserDto} from "../user/dto/create-user.dto";
 import * as bcrypt from "bcrypt";
 import {UserRepo} from "../user/repositories/user.repo";
 import {UserQueryRepo} from "../user/repositories/user.query.repo";
+import {JwtService} from "@nestjs/jwt";
+import {ConfigService} from '@nestjs/config';
+
 
 @Injectable()
 export class AuthService {
@@ -11,6 +14,8 @@ export class AuthService {
     constructor(
         private readonly userRepo: UserRepo,
         private readonly userQueryRepo: UserQueryRepo,
+        private jwtService: JwtService,
+        private readonly configService: ConfigService,
     ) {
     }
 
@@ -60,6 +65,51 @@ export class AuthService {
         return userId;
     }
 
+    async login(loginOrEmail: string, password: string) {
+
+        const accessSecret = this.configService.get<string>('JWT_ACCESS_SECRET');
+        const accessExpiry = this.configService.get<string>('ACCESS_TOKEN_EXPIRY');
+
+
+        const refreshSecret: string | undefined = this.configService.get<string>('JWT_REFRESH_SECRET');
+        const refreshExpiry: string | undefined = this.configService.get<string>('REFRESH_TOKEN_EXPIRY');
+
+        if (!accessSecret || !refreshSecret) {
+            throw new Error('JWT_ACCESS_SECRET or JWT_REFRESH_SECRET is missing in environment variables');
+        }
+
+        const user = await this.validateUser(
+            loginOrEmail,
+            password);
+
+        if (!user) {
+            throw new UnauthorizedException('Invalid credentials');
+        }
+
+        const accessTokenPayload = {loginOrEmail: loginOrEmail, id: user.id} as Record<string, any>;
+        const refreshTokenPayload = {userId: user.id} as Record<string, any>;
+
+
+        const accessToken = this.jwtService.sign(accessTokenPayload, {
+            secret: accessSecret,
+            expiresIn: accessExpiry || '10s',
+        });
+
+        const refreshToken = this.jwtService.sign(refreshTokenPayload, {
+            secret: refreshSecret,
+            expiresIn: refreshExpiry
+        });
+
+
+        const decodedToken = this.jwtService.decode(refreshToken) as { iat: number, exp: number };
+
+        if (!decodedToken) {
+            throw new Error('Failed to decode refresh token');
+        }
+
+        return {accessToken, refreshToken};
+    }
+
     findAll() {
         return `This action returns all auth`;
     }
@@ -74,5 +124,22 @@ export class AuthService {
 
     remove(id: number) {
         return `This action removes a #${id} auth`;
+    }
+
+    private async validateUser(loginOrEmail: string, password: string) {
+
+        const user = await this.userQueryRepo.findOneByLoginOrEmail(loginOrEmail);
+
+        if (!user) {
+            throw new UnauthorizedException('Invalid credentials');
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            throw new UnauthorizedException('Invalid credentials');
+        }
+
+        return user;
     }
 }

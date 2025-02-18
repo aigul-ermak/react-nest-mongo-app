@@ -7,12 +7,31 @@ import {MongooseModule} from "@nestjs/mongoose";
 import {User} from "../user/entities/user.entity";
 import {UserSchema} from "../user/entities/user.schema";
 import {UserService} from "../user/user.service";
+import {JwtModule} from "@nestjs/jwt";
+import {ConfigService} from "@nestjs/config";
 
 @Module({
-    imports: [MongooseModule.forFeature([{name: User.name, schema: UserSchema}]),
+    imports: [
+        JwtModule.registerAsync({
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) => {
+                return {
+                    secret: configService.get<string>('jwtSettings.JWT_ACCESS_SECRET'),
+
+                    signOptions: {
+                        expiresIn: configService.get<string>('jwtSettings.ACCESS_TOKEN_EXPIRY'),
+                    },
+
+                }
+            },
+        }),
+        MongooseModule.forFeature([{name: User.name, schema: UserSchema}]),
     ],
     controllers: [AuthController],
     providers: [AuthService, UserService, UserRepo, UserQueryRepo],
+    exports: [JwtModule],
+
 })
+
 export class AuthModule {
 }
