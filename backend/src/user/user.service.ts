@@ -1,26 +1,55 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import {ConflictException, Injectable} from '@nestjs/common';
+import {CreateUserDto} from './dto/create-user.dto';
+import {UpdateUserDto} from './dto/update-user.dto';
+import {UserRepo} from "./repositories/user.repo";
+import {UserQueryRepo} from "./repositories/user.query.repo";
+import {User} from "./entities/user.entity";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
 
-  findAll() {
-    return `This action returns all user`;
-  }
+    constructor(
+        private readonly userRepo: UserRepo,
+        private readonly userQueryRepo: UserQueryRepo,
+    ) {
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+    async create(createUserDto: CreateUserDto) {
+        const existingUser: User | null = await this.userQueryRepo.findOneByEmail(createUserDto.email);
+        console.log("existingUser", existingUser)
+        if (existingUser) {
+            throw new ConflictException(`User with this email already exists`);
+        }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+        const saltRounds: number = 10;
+        const passwordHashed: string = await bcrypt.hash(createUserDto.password, saltRounds);
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+
+        const newUser = {
+            login: createUserDto.login,
+            email: createUserDto.email,
+            password: passwordHashed,
+        }
+
+        const userId = await this.userRepo.create(newUser);
+
+        return await this.userQueryRepo.findOne(userId);
+    }
+
+    findAll() {
+        return `This action returns all user`;
+    }
+
+    findOne(id: number) {
+        return `This action returns a #${id} user`;
+    }
+
+    update(id: number, updateUserDto: UpdateUserDto) {
+        return `This action updates a #${id} user`;
+    }
+
+    remove(id: number) {
+        return `This action removes a #${id} user`;
+    }
 }
