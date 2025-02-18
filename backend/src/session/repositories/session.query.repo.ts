@@ -8,4 +8,7 @@ export class SessionQueryRepo {
     constructor(@InjectModel(Session.name) private sessionModel: Model<SessionDocument>) {
     }
 
+    async findOne(id: string) {
+        return this.sessionModel.findOne({id}).exec();
+    }
 }

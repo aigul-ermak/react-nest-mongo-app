@@ -13,4 +13,10 @@ export class SessionRepo {
         return result._id.toString();
     }
 
+    async delete(id: string) {
+        const result = await this.sessionModel.deleteOne({id});
+
+        return result.deletedCount === 1;
+    }
+
 }

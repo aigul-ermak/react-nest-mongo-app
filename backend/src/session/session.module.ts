@@ -12,7 +12,7 @@ import {Session, SessionEntity} from "./entities/session.schema";
     ],
     controllers: [SessionController],
     providers: [SessionService, SessionRepo, SessionQueryRepo],
-    exports: [SessionRepo],
+    exports: [SessionRepo, SessionQueryRepo],
 })
 export class SessionModule {
 }

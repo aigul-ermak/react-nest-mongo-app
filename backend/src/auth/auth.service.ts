@@ -7,6 +7,7 @@ import {UserQueryRepo} from "../user/repositories/user.query.repo";
 import {JwtService} from "@nestjs/jwt";
 import {ConfigService} from '@nestjs/config';
 import {SessionRepo} from "../session/repositories/session.repo";
+import {SessionQueryRepo} from "../session/repositories/session.query.repo";
 
 
 @Injectable()
@@ -18,6 +19,7 @@ export class AuthService {
         private jwtService: JwtService,
         private readonly configService: ConfigService,
         private readonly sessionRepo: SessionRepo,
+        private readonly sessionQueryRepo: SessionQueryRepo,
     ) {
     }
 
@@ -140,7 +142,15 @@ export class AuthService {
     }
 
     async logout(id: string) {
-        return
+        const session = await this.sessionQueryRepo.findOne(id);
+
+        if (!session) {
+            throw new UnauthorizedException('Session not found');
+        }
+
+        await this.sessionRepo.delete(id)
+
+        return true;
     }
 
     private async validateUser(loginOrEmail: string, password: string) {
