@@ -16,6 +16,7 @@ import {CreateUserDto} from "../user/dto/create-user.dto";
 import {UserService} from "../user/user.service";
 import {UserLoginDto} from "../user/dto/user-login.dto";
 import {Request, Response} from 'express';
+import {RefreshTokenGuard} from "../basics/guards/refresh-token.guard";
 
 @Controller('auth')
 export class AuthController {
@@ -74,12 +75,13 @@ export class AuthController {
     @Post('/logout')
     @HttpCode(204)
     @UseGuards(RefreshTokenGuard)
-    logout(@Req() request: Request, @Res() res: Response) {
+    async logout(@Req() request: Request, @Res() res: Response) {
+
         if (!request.user) throw new UnauthorizedException('User info was not provided')
 
-        const {userId} = request.user
+        const {id} = request.user
 
-        await this.authService.logout(userId);
+        await this.authService.logout(id);
 
         res.clearCookie('refreshToken', {
             httpOnly: true,
