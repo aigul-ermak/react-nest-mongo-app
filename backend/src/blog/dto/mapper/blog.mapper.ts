@@ -9,7 +9,7 @@ export class BlogOutputModel {
     updatedAt: Date
 }
 
-export const mapToViewModel = (blog: BlogDocument) => {
+export const BlogMapper = (blog: BlogDocument) => {
 
     const outputModel: BlogOutputModel = new BlogOutputModel();
 
