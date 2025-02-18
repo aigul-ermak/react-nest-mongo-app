@@ -1,4 +1,16 @@
-import {Body, Controller, Delete, Get, HttpCode, Param, Post, Req, Res} from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    Param,
+    Post,
+    Req,
+    Res,
+    UnauthorizedException,
+    UseGuards
+} from '@nestjs/common';
 import {AuthService} from './auth.service';
 import {CreateUserDto} from "../user/dto/create-user.dto";
 import {UserService} from "../user/user.service";
@@ -57,5 +69,24 @@ export class AuthController {
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.authService.remove(+id);
+    }
+
+    @Post('/logout')
+    @HttpCode(204)
+    @UseGuards(RefreshTokenGuard)
+    logout(@Req() request: Request, @Res() res: Response) {
+        if (!request.user) throw new UnauthorizedException('User info was not provided')
+
+        const {userId} = request.user
+
+        await this.authService.logout(userId);
+
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+        });
+
+        res.send();
     }
 }

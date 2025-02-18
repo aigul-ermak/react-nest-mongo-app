@@ -126,6 +126,10 @@ export class AuthService {
         return `This action removes a #${id} auth`;
     }
 
+    async logout(id: string) {
+        return `This action removes a #${id} auth`;
+    }
+
     private async validateUser(loginOrEmail: string, password: string) {
 
         const user = await this.userQueryRepo.findOneByLoginOrEmail(loginOrEmail);
