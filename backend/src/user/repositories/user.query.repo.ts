@@ -23,4 +23,20 @@ export class UserQueryRepo {
         return UserMapper(user);
     }
 
+    async findOneByLoginOrEmail(loginOrEmail: string) {
+        const user = await this.userModel.findOne({
+            $or:
+                [
+                    {'login': loginOrEmail},
+                    {'email': loginOrEmail}
+                ]
+        })
+
+        if (!user) {
+            return null;
+        }
+
+        return UserMapper(user as UserDocument);
+    }
+
 }
