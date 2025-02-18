@@ -1,10 +1,16 @@
 import {InjectModel} from "@nestjs/mongoose";
-import {Session} from "@nestjs/common";
+
 import {Model} from "mongoose";
-import {SessionDocument} from "../entities/session.schema";
+import {Session, SessionDocument} from "../entities/session.schema";
 
 export class SessionRepo {
     constructor(@InjectModel(Session.name) private sessionModel: Model<SessionDocument>) {
+    }
+
+    async create(sessionUser) {
+        const result = await this.sessionModel.create(sessionUser);
+
+        return result._id.toString();
     }
 
 }

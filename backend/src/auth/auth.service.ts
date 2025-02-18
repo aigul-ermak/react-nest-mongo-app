@@ -6,6 +6,7 @@ import {UserRepo} from "../user/repositories/user.repo";
 import {UserQueryRepo} from "../user/repositories/user.query.repo";
 import {JwtService} from "@nestjs/jwt";
 import {ConfigService} from '@nestjs/config';
+import {SessionRepo} from "../session/repositories/session.repo";
 
 
 @Injectable()
@@ -16,6 +17,7 @@ export class AuthService {
         private readonly userQueryRepo: UserQueryRepo,
         private jwtService: JwtService,
         private readonly configService: ConfigService,
+        private readonly sessionRepo: SessionRepo,
     ) {
     }
 
@@ -107,6 +109,17 @@ export class AuthService {
             throw new Error('Failed to decode refresh token');
         }
 
+        const iatDate = new Date(decodedToken.iat * 1000);
+        const expDate = new Date(decodedToken.exp * 1000);
+
+        const sessionUser = {
+            userId: user.id,
+            iatDate: iatDate,
+            expDate: expDate
+        }
+
+        await this.sessionRepo.create(sessionUser);
+
         return {accessToken, refreshToken};
     }
 
@@ -127,7 +140,7 @@ export class AuthService {
     }
 
     async logout(id: string) {
-        return `This action removes a #${id} auth`;
+        return
     }
 
     private async validateUser(loginOrEmail: string, password: string) {

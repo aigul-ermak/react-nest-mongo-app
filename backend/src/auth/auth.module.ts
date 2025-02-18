@@ -9,6 +9,7 @@ import {UserSchema} from "../user/entities/user.schema";
 import {UserService} from "../user/user.service";
 import {JwtModule} from "@nestjs/jwt";
 import {ConfigService} from "@nestjs/config";
+import {SessionModule} from "../session/session.module";
 
 @Module({
     imports: [
@@ -26,6 +27,7 @@ import {ConfigService} from "@nestjs/config";
             },
         }),
         MongooseModule.forFeature([{name: User.name, schema: UserSchema}]),
+        SessionModule,
     ],
     controllers: [AuthController],
     providers: [AuthService, UserService, UserRepo, UserQueryRepo],
