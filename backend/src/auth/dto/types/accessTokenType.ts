@@ -4,6 +4,5 @@ export type AccessTokenType = {
 }
 
 export type RefreshTokenType = {
-    loginOrEmail: string | undefined,
     id: string,
 }
