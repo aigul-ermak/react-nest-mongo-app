@@ -2,6 +2,7 @@ import {Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common'
 import {CreateBlogDto} from './dto/create-blog.dto';
 import {UpdateBlogDto} from './dto/update-blog.dto';
 import {BlogService} from "./blog.service";
+import {BlogOutputModel} from "./dto/mapper/blog.mapper";
 
 @Controller('blog')
 export class BlogController {
@@ -24,8 +25,8 @@ export class BlogController {
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        // return this.blogService.findOne(+id);
+    findOne(@Param('id') id: string): Promise<BlogOutputModel> {
+        return this.blogService.findOne(id);
     }
 
     @Patch(':id')
