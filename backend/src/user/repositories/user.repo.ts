@@ -14,4 +14,9 @@ export class UserRepo {
         const savedUser = await newUser.save();
         return savedUser._id.toString();
     }
+
+    async remove(id: string): Promise<boolean> {
+        const result = await this.userModel.findByIdAndDelete(id).exec();
+        return result !== null;
+    }
 }
