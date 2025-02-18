@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, HttpCode, Param, Patch, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, Param, Post, Put} from '@nestjs/common';
 import {CreateBlogDto} from './dto/create-blog.dto';
 import {UpdateBlogDto} from './dto/update-blog.dto';
 import {BlogService} from "./blog.service";
@@ -29,14 +29,15 @@ export class BlogController {
         return this.blogService.findOne(id);
     }
 
-    @Patch(':id')
+    @Put(':id')
+    @HttpCode(204)
     update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
-        // return this.blogService.update(+id, updateBlogDto);
+        return this.blogService.update(id, updateBlogDto);
     }
 
     @Delete(':id')
     @HttpCode(204)
     remove(@Param('id') id: string): Promise<boolean> {
-          return this.blogService.remove(id);
+        return this.blogService.remove(id);
     }
 }

@@ -34,8 +34,14 @@ export class BlogService {
 
     }
 
-    update(id: number, updateBlogDto: UpdateBlogDto) {
-        return `This action updates a #${id} blog`;
+    async update(id: string, updateBlogDto: UpdateBlogDto) {
+        const blog: BlogDocument | null = await this.blogQueryRepo.findOne(id);
+
+        if (!blog) {
+            throw new NotFoundException(`Blog not found`);
+        }
+
+        return await this.blogRepo.update(id, updateBlogDto);
     }
 
     async remove(id: string): Promise<boolean> {
