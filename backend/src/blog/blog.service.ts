@@ -38,7 +38,13 @@ export class BlogService {
         return `This action updates a #${id} blog`;
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} blog`;
+    async remove(id: string): Promise<boolean> {
+        const blog: BlogDocument | null = await this.blogQueryRepo.findOne(id);
+
+        if (!blog) {
+            throw new NotFoundException('Blog not found');
+        }
+
+        return await this.blogRepo.delete(id);
     }
 }

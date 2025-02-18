@@ -1,6 +1,6 @@
 import {InjectModel} from "@nestjs/mongoose";
 import {Blog} from "../entities/blog.entity";
-import {Model} from "mongoose";
+import {isValidObjectId, Model} from "mongoose";
 import {BlogDocument} from "../entities/blog.schema";
 import {CreateBlogDto} from "../dto/create-blog.dto";
 import {BlogDbType} from "../dto/types/blogDbType";
@@ -12,6 +12,11 @@ export class BlogRepo {
     async create(createBlogDto: CreateBlogDto): Promise<Blog> {
         const blog  = new this.blogModel({...createBlogDto});
         return blog.save();
+    }
+
+    async delete(id: string): Promise<boolean> {
+        const result = await this.blogModel.findByIdAndDelete(id).exec();
+        return result !== null;
     }
 
 
