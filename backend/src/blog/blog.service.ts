@@ -3,7 +3,7 @@ import {CreateBlogDto} from './dto/create-blog.dto';
 import {UpdateBlogDto} from './dto/update-blog.dto';
 import {BlogQueryRepo} from "./repositories/blog.query.repo";
 import {BlogRepo} from "./repositories/blog.repo";
-import {BlogOutputModel, mapToViewModel} from "./dto/mapper/blog.mapper";
+import {BlogOutputModel, BlogMapper} from "./dto/mapper/blog.mapper";
 import {BlogDocument} from "./entities/blog.schema";
 
 @Injectable()
@@ -30,7 +30,7 @@ export class BlogService {
             throw new NotFoundException(`Blog not found`);
         }
 
-        return mapToViewModel(blog)
+        return BlogMapper(blog)
 
     }
 
