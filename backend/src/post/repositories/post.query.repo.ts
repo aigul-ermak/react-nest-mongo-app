@@ -2,6 +2,7 @@ import {InjectModel} from "@nestjs/mongoose";
 import {Model} from "mongoose";
 
 import {Post, PostDocument} from "../entities/post.schema";
+import {PostMapper} from "../dto/mapper/post.mapper";
 
 
 export class PostQueryRepo {
@@ -19,8 +20,10 @@ export class PostQueryRepo {
 
         const total = await this.postModel.countDocuments();
 
+        const mappedPosts = posts.map(post => PostMapper(post));
+
         return {
-            posts,
+            post: mappedPosts,
             total,
             page,
             totalPages: Math.ceil(total / limit),
