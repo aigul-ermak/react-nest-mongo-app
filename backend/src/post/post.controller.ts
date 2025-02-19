@@ -1,34 +1,47 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PostService } from './post.service';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import {Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, Req, UseGuards} from '@nestjs/common';
+import {PostService} from './post.service';
+import {CreatePostDto} from './dto/create-post.dto';
+import {UpdatePostDto} from './dto/update-post.dto';
+import {SortPostsDto} from "./dto/sort-post.dto";
+import {Request} from 'express';
+import {JwtAuthGuard} from "../basics/guards/jwtAuthGuard";
 
-@Controller('post')
+
+@Controller('posts')
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+    constructor(private readonly postService: PostService) {
+    }
 
-  @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postService.create(createPostDto);
-  }
+    @Post()
+    @UseGuards(JwtAuthGuard)
+    create(@Body() createPostDto: CreatePostDto, @Req() req: Request) {
+        const user = req.user;
+        return this.postService.create(createPostDto, user.userId);
+    }
 
-  @Get()
-  findAll() {
-    return this.postService.findAll();
-  }
+    @Get()
+    findAll(@Query() sortData: SortPostsDto,
+            @Req() req: Request) {
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
-  }
+        const page = parseInt(sortData.page, 10) || 1;
+        const limit = parseInt(sortData.limit, 10) || 10;
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
-  }
+        return this.postService.findAll(page, limit);
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
-  }
+    @Get(':id')
+    @HttpCode(200)
+    findOne(@Param('id') id: string) {
+        return this.postService.findOne(+id);
+    }
+
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+        return this.postService.update(+id, updatePostDto);
+    }
+
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.postService.remove(+id);
+    }
 }
