@@ -1,11 +1,10 @@
-import {Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, Req, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query, Req, UseGuards} from '@nestjs/common';
 import {PostService} from './post.service';
 import {CreatePostDto} from './dto/create-post.dto';
 import {UpdatePostDto} from './dto/update-post.dto';
 import {SortPostsDto} from "./dto/sort-post.dto";
 import {Request} from 'express';
 import {JwtAuthGuard} from "../basics/guards/jwtAuthGuard";
-import {JwtAuthNullableGuard} from "../basics/guards/jwtAuthNullable.guard";
 
 
 @Controller('posts')
@@ -33,20 +32,26 @@ export class PostController {
     @Get(':id')
     @HttpCode(200)
     // @UseGuards(JwtAuthNullableGuard)
-    findOne( @Param('id') id: string,
-              @Req() req: Request) {
+    findOne(@Param('id') id: string,
+            @Req() req: Request) {
         // const userId = req['userId'];
 
         return this.postService.findOne(id);
     }
 
-    @Patch(':id')
+    @Put(':id')
+    @HttpCode(204)
+    // @UseGuards(JwtAuthGuard)
     update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-        return this.postService.update(+id, updatePostDto);
+        // const user = req.user;
+        return this.postService.update(id, updatePostDto);
     }
 
+
     @Delete(':id')
+    @HttpCode(204)
+    //@UseGuards(JwtAuthGuard)
     remove(@Param('id') id: string) {
-        return this.postService.remove(+id);
+        return this.postService.remove(id);
     }
 }

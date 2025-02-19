@@ -64,11 +64,31 @@ export class PostService {
         return PostMapper(post);
     }
 
-    update(id: number, updatePostDto: UpdatePostDto) {
-        return `This action updates a #${id} post`;
+    async update(id: string, updatePostDto: UpdatePostDto) {
+        const post = await this.postQueryRepo.findOne(id);
+
+        if (!post) {
+            throw new NotFoundException('Post not found');
+        }
+
+        const updatedPost = await this.postRepo.update(
+            id, updatePostDto);
+
+        if (!updatedPost) {
+            throw new NotFoundException(`Post wasn't created`);
+        }
+
+        return updatedPost;
+
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} post`;
+    async remove(id: string) {
+        const post = await this.postQueryRepo.findOne(id)
+
+        if (!post) {
+            throw new NotFoundException(`Post not found`);
+        }
+
+        return await this.postRepo.remove(id);
     }
 }
