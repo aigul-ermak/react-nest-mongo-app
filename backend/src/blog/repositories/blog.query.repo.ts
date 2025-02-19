@@ -1,7 +1,6 @@
 import {InjectModel} from "@nestjs/mongoose";
-import {Blog} from "../entities/blog.entity";
 import {isValidObjectId, Model} from "mongoose";
-import {BlogDocument} from "../entities/blog.schema";
+import {Blog, BlogDocument} from "../entities/blog.schema";
 
 
 export class BlogQueryRepo {
