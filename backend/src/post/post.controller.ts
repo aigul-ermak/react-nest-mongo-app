@@ -5,6 +5,7 @@ import {UpdatePostDto} from './dto/update-post.dto';
 import {SortPostsDto} from "./dto/sort-post.dto";
 import {Request} from 'express';
 import {JwtAuthGuard} from "../basics/guards/jwtAuthGuard";
+import {JwtAuthNullableGuard} from "../basics/guards/jwtAuthNullable.guard";
 
 
 @Controller('posts')
@@ -31,8 +32,12 @@ export class PostController {
 
     @Get(':id')
     @HttpCode(200)
-    findOne(@Param('id') id: string) {
-        return this.postService.findOne(+id);
+    // @UseGuards(JwtAuthNullableGuard)
+    findOne( @Param('id') id: string,
+              @Req() req: Request) {
+        // const userId = req['userId'];
+
+        return this.postService.findOne(id);
     }
 
     @Patch(':id')

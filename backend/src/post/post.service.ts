@@ -54,8 +54,14 @@ export class PostService {
         return this.postQueryRepo.getAllPosts(page, limit);
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} post`;
+    async findOne(id: string) {
+        const post = await this.postQueryRepo.findOne(id);
+
+        if (!post) {
+            throw new NotFoundException(`Post not found`);
+        }
+
+        return PostMapper(post);
     }
 
     update(id: number, updatePostDto: UpdatePostDto) {
