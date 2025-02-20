@@ -10,14 +10,14 @@ export class BlogRepo {
 
     async create(createBlogDto: CreateBlogDto): Promise<Blog> {
         const blog = new this.blogModel({...createBlogDto});
-        return blog.save();
+        return await blog.save();
     }
 
     async update(id: string, updateBlogDto: UpdateBlogDto): Promise<Blog> {
-        const result = this.blogModel
+        const result = await this.blogModel
             .findByIdAndUpdate(id, updateBlogDto, {new: true})
             .exec();
-        console.log("result in update repo", result)
+
         return result;
     }
 

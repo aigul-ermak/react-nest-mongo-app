@@ -31,7 +31,20 @@ export class PostQueryRepo {
     }
 
     async findOne(id: string) {
-        const result = await this.postModel.findById(id).exec();
-        return result;
+        return this.postModel.find({id});
     }
+
+    async countPostsByBlogId(blogId: string): Promise<number> {
+        return await this.postModel.countDocuments({ blogId });
+    }
+
+    async findAllPostsPaginated(blogId: string, skip: number, limit: number) {
+        return await this.postModel
+            .find({ blogId })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+    }
+
 }

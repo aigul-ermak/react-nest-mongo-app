@@ -5,9 +5,9 @@ export class SortPostsDto {
     // pageSize?: number;
     @IsOptional()
     @IsNumberString()
-    page?: string;
+    page?: number;
 
     @IsOptional()
     @IsNumberString()
-    limit?: string;
+    limit?: number;
 }
