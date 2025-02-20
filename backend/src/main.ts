@@ -8,6 +8,18 @@ async function bootstrap() {
 
     app.use(cookieParser());
 
+    app.enableCors({
+        origin: (origin, callback) => {
+            if (!origin || origin.startsWith("http://localhost")) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        credentials: true,
+    });
+
     const configService = app.get(ConfigService);
 
     const port = configService.get<number>('APP_PORT') || 3000;
