@@ -1,29 +1,34 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { Container, TextField, Button, Typography, Box } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {useForm} from "react-hook-form";
+import {Alert, Box, Button, Container, TextField, Typography} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 import {registerUser} from "../api/api.ts";
 
 interface RegisterForm {
-    username: string;
+    login: string;
     email: string;
     password: string;
 }
 
 export const Register = () => {
-    const { register, handleSubmit, reset } = useForm<RegisterForm>();
+    const {register, handleSubmit, reset,} = useForm<RegisterForm>();
     const navigate = useNavigate();
+    const [error, setError, setServerError] = useState<string | null>(null);
 
     const onSubmit = async (data: RegisterForm) => {
         try {
             await registerUser(data);
-            alert("Registration successful! You can now log in.");
             reset();
             navigate("/login");
         } catch (error) {
-            console.error("Registration failed:", error);
-            alert("Registration failed. Try again.");
+            if (error.response?.data?.errorsMessages) {
+                const errorMessage = error.response.data.errorsMessages
+                    .map((err: { message: string }) => err.message)
+                    .join("\n");
+                setError(errorMessage);
+            } else {
+                setError("Registration failed. Please try again.");
+            }
         }
     };
 
@@ -32,6 +37,9 @@ export const Register = () => {
             <Box textAlign="center" my={4}>
                 <Typography variant="h4">Register</Typography>
             </Box>
+
+            {error && <Alert severity="error">{error}</Alert>}
+
             <form onSubmit={handleSubmit(onSubmit)}>
                 <TextField
                     {...register("login")}
@@ -41,7 +49,7 @@ export const Register = () => {
                     required
                 />
                 <TextField
-                    {...register("email", )}
+                    {...register("email",)}
                     label="Email"
                     fullWidth
                     margin="normal"

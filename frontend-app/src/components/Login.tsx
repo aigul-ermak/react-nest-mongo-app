@@ -13,15 +13,14 @@ interface LoginForm {
 export const Login = () => {
     const { register, handleSubmit, reset } = useForm<LoginForm>();
     const navigate = useNavigate();
+    const [error, setError] = useState<string | null>(null);
 
     const onSubmit = async (data: LoginForm) => {
         try {
             await loginUser(data);
-            alert("Login successful!");
             navigate("/");
         } catch (error) {
-            console.error("Login failed:", error);
-            alert("Invalid credentials. Try again.");
+            setError(error.message || "Invalid credentials. Try again.");
         }
     };
 
@@ -30,16 +29,19 @@ export const Login = () => {
             <Box textAlign="center" my={4}>
                 <Typography variant="h4">Login</Typography>
             </Box>
+
+            {error && <Alert severity="error">{error}</Alert>}
+
             <form onSubmit={handleSubmit(onSubmit)}>
                 <TextField
-                    {...register("loginOrEmail")}
+                    {...register("loginOrEmail", { required: "Username or Email is required" })}
                     label="Username or Email"
                     fullWidth
                     margin="normal"
                     required
                 />
                 <TextField
-                    {...register("password")}
+                    {...register("password", { required: "Password is required" })}
                     type="password"
                     label="Password"
                     fullWidth

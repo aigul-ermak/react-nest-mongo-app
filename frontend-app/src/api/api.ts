@@ -18,19 +18,32 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-// registerUser
-export const registerUser = async (data: { username: string; email: string; password: string }) => {
+// Register User
+export const registerUser = async (data: { login: string; email: string; password: string }) => {
     return api.post("/auth/registration", data);
 };
 
+// Login User
 export const loginUser = async (data: { loginOrEmail: string; password: string }) => {
     try {
         const response = await api.post("/auth/login", data);
-        if (response.data.token) {
-            localStorage.setItem("token", response.data.token);
+        if (response.data.accessToken) {
+            localStorage.setItem("token", response.data.accessToken);
         }
         return response.data;
+    } catch (error: any) {
+        if (error.response?.data?.message) {
+            throw new Error(error.response.data.message);
+        }
+        throw new Error("Login failed. Please try again.");
+    }
+};
+
+// Logout User
+export const logoutUser = () => {
+    try{
+        return api.post("/auth/logout");
     } catch (error) {
-        throw error.response?.data || "Login failed";
+        console.error("Logout failed:", error);
     }
 };
