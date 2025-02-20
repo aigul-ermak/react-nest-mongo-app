@@ -40,10 +40,13 @@ export const loginUser = async (data: { loginOrEmail: string; password: string }
 };
 
 // Logout User
-export const logoutUser = () => {
-    try{
-        return api.post("/auth/logout");
+export const logoutUser = async () => {
+    try {
+        await api.post("/auth/logout");
     } catch (error) {
         console.error("Logout failed:", error);
+    } finally {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
     }
 };
