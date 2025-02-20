@@ -6,7 +6,9 @@ import {Home} from "./components/Home.tsx";
 import {Box} from "@mui/material";
 import {Register} from "./context/Register.tsx";
 import {Footer} from "./components/Footer.tsx";
-import {Login} from "./components/Login.tsx";
+import Login from "./components/Login.tsx";
+
+
 
 
 
@@ -18,7 +20,7 @@ const App = () => {
                 <Box flexGrow={1}>
                     <Routes> {}
                         <Route path="/" element={<Home />} />
-                        {/*<Route path="/login" element={<Login />} />*/}
+                        <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                     </Routes>
                 </Box>

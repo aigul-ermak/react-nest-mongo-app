@@ -1,26 +1,23 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { Container, TextField, Button, Typography, Box } from "@mui/material";
-import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import React, { useState } from "react";
+import { TextField, Button, Box, Typography, Container, Alert } from "@mui/material";
+import {loginUser} from "../api/api.ts";
+import {useNavigate} from "react-router-dom";
+import {useForm} from "react-hook-form";
+
 
 interface LoginForm {
-    email: string;
+    loginOrEmail: string;
     password: string;
 }
 
-export const Login= () => {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm<LoginForm>();
+export const Login = () => {
+    const { register, handleSubmit, reset } = useForm<LoginForm>();
     const navigate = useNavigate();
-    const { login } = useAuth();
 
     const onSubmit = async (data: LoginForm) => {
         try {
-            const response = await axios.post("http://localhost:5000/api/auth/login", data);
-            login(response.data.token);
+            await loginUser(data);
             alert("Login successful!");
-            reset();
             navigate("/");
         } catch (error) {
             console.error("Login failed:", error);
@@ -35,35 +32,24 @@ export const Login= () => {
             </Box>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <TextField
-                    {...register("email", { required: "Email is required" })}
-                    label="Email"
-                    type="email"
+                    {...register("loginOrEmail")}
+                    label="Username or Email"
                     fullWidth
                     margin="normal"
-                    error={!!errors.email}
-                    helperText={errors.email?.message}
+                    required
                 />
                 <TextField
-                    {...register("password", { required: "Password is required", minLength: 6 })}
-                    label="Password"
+                    {...register("password")}
                     type="password"
+                    label="Password"
                     fullWidth
                     margin="normal"
-                    error={!!errors.password}
-                    helperText={errors.password?.message}
+                    required
                 />
                 <Button type="submit" variant="contained" color="primary" fullWidth>
                     Login
                 </Button>
             </form>
-            <Box textAlign="center" mt={2}>
-                <Typography variant="body2">
-                    Don't have an account?{" "}
-                    <Link to="/register" style={{ textDecoration: "none", color: "blue" }}>
-                        Register here
-                    </Link>
-                </Typography>
-            </Box>
         </Container>
     );
 };

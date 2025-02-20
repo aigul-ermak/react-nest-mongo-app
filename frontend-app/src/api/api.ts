@@ -18,6 +18,19 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+// registerUser
 export const registerUser = async (data: { username: string; email: string; password: string }) => {
     return api.post("/auth/registration", data);
+};
+
+export const loginUser = async (data: { loginOrEmail: string; password: string }) => {
+    try {
+        const response = await api.post("/auth/login", data);
+        if (response.data.token) {
+            localStorage.setItem("token", response.data.token);
+        }
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || "Login failed";
+    }
 };
