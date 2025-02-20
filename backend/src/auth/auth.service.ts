@@ -133,8 +133,18 @@ export class AuthService {
         return `This action returns a #${id} auth`;
     }
 
-    update(id: number, updateAuthDto: UpdateAuthDto) {
-        return `This action updates a #${id} auth`;
+    async getUser(id: string) {
+        const user = await this.userQueryRepo.findOne(id);
+        console.log("user", user)
+        if (!user) {
+            throw new UnauthorizedException('User not found');
+        }
+
+        return ({
+            "email": user?.email,
+            "login": user?.login,
+            "userId": user?.id
+        })
     }
 
     remove(id: number) {

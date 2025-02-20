@@ -13,16 +13,15 @@ import {
 } from '@nestjs/common';
 import {AuthService} from './auth.service';
 import {CreateUserDto} from "../user/dto/create-user.dto";
-import {UserService} from "../user/user.service";
 import {UserLoginDto} from "../user/dto/user-login.dto";
 import {Request, Response} from 'express';
 import {RefreshTokenGuard} from "../basics/guards/refresh-token.guard";
+import {JwtAuthGuard} from "../basics/guards/jwtAuthGuard";
 
 @Controller('auth')
 export class AuthController {
     constructor(
         private readonly authService: AuthService,
-        private readonly userService: UserService,
     ) {
     }
 
@@ -48,16 +47,28 @@ export class AuthController {
 
         return res.json({accessToken});
     }
+    @Get('/me')
+    @HttpCode(200)
+    @UseGuards(JwtAuthGuard)
+    async getUser(
+        @Req() request: Request
+    ) {
+        if (!request.user) throw new UnauthorizedException('User info was not provided')
 
-    @Get()
-    findAll() {
-        return this.authService.findAll();
+        const {userId} = request.user;
+
+        return this.authService.getUser(userId);
     }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.authService.findOne(+id);
-    }
+    // @Get()
+    // findAll() {
+    //     return this.authService.findAll();
+    // }
+
+    // @Get(':id')
+    // findOne(@Param('id') id: string) {
+    //     return this.authService.findOne(+id);
+    // }
 
     @Post('/registration')
     @HttpCode(204)
