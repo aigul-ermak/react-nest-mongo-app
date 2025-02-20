@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useForm} from "react-hook-form";
 import {Alert, Box, Button, Container, TextField, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {registerUser} from "../api/api.ts";
+import {authService} from "../api/api.ts";
 
 interface RegisterForm {
     login: string;
@@ -17,7 +17,7 @@ export const Register = () => {
 
     const onSubmit = async (data: RegisterForm) => {
         try {
-            await registerUser(data);
+            await authService.register(data);
             reset();
             navigate("/login");
         } catch (error) {

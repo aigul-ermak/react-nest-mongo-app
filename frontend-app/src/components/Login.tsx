@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { TextField, Button, Box, Typography, Container, Alert } from "@mui/material";
-import {loginUser} from "../api/api.ts";
+import React, {useState} from "react";
+import {Alert, Box, Button, Container, TextField, Typography} from "@mui/material";
+import {authService} from "../api/api.ts";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
+import {useAuth} from "../context/AuthContext.tsx";
 
 
 interface LoginForm {
@@ -11,13 +12,15 @@ interface LoginForm {
 }
 
 export const Login = () => {
-    const { register, handleSubmit, reset } = useForm<LoginForm>();
+    const {register, handleSubmit, reset} = useForm<LoginForm>();
     const navigate = useNavigate();
+    const {refreshUser} = useAuth();
     const [error, setError] = useState<string | null>(null);
 
     const onSubmit = async (data: LoginForm) => {
         try {
-            await loginUser(data);
+            await authService.login(data);
+            // await refreshUser();
             navigate("/");
         } catch (error) {
             setError(error.message || "Invalid credentials. Try again.");
@@ -34,14 +37,14 @@ export const Login = () => {
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <TextField
-                    {...register("loginOrEmail", { required: "Username or Email is required" })}
+                    {...register("loginOrEmail", {required: "Username or Email is required"})}
                     label="Username or Email"
                     fullWidth
                     margin="normal"
                     required
                 />
                 <TextField
-                    {...register("password", { required: "Password is required" })}
+                    {...register("password", {required: "Password is required"})}
                     type="password"
                     label="Password"
                     fullWidth
