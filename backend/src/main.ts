@@ -14,13 +14,13 @@ async function bootstrap() {
                 "https://react-nest-mongo-app-seven.vercel.app",
             ];
 
-            // console.log(`Request Origin: ${origin}`);
+            console.log(`Request Origin: ${origin}`);
 
-            // if (!origin || origin.startsWith("http://localhost") || allowedOrigins.includes(origin)) {
-            //     callback(null, true);
-            // } else {
-            //     callback(new Error("Not allowed by CORS"));
-            // }
+            if (!origin || origin.startsWith("http://localhost") || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
         },
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         credentials: true,
@@ -32,7 +32,7 @@ async function bootstrap() {
 
     console.log(`App running on port: ${port}`);
 
-    await app.listen(port, '0.0.0.0');
+    await app.listen(port);
 }
 
 bootstrap();
