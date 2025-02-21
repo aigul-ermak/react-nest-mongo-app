@@ -50,10 +50,6 @@ export class BlogQueryRepo {
                 }
             });
 
-        if (!blog) {
-            throw new NotFoundException('Blog not found');
-        }
-
         return blog;
     }
 

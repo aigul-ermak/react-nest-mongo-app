@@ -6,7 +6,7 @@ import {BlogOutputModel} from "./dto/mapper/blog.mapper";
 import {SortPostsDto} from "../post/dto/sort-post.dto";
 import {Request} from "express";
 
-@Controller('blog')
+@Controller('blogs')
 export class BlogController {
     constructor(private readonly blogService: BlogService) {
     }
@@ -20,9 +20,8 @@ export class BlogController {
     async findAll(@Query() sortData: SortPostsDto,
                   @Req() req: Request) {
 
-        const page = parseInt(sortData.page, 10) || 1;
-        const limit = parseInt(sortData.limit, 10) || 10;
-
+        const page = sortData.page || 1;
+        const limit = sortData.limit || 10;
         return await this.blogService.findAll(page, limit);
     }
 
