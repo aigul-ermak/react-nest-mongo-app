@@ -78,10 +78,10 @@ export class AuthController {
         return this.authService.create(createUserDto);
     }
 
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.authService.remove(+id);
-    }
+    // @Delete(':id')
+    // remove(@Param('id') id: string) {
+    //     return this.authService.remove(+id);
+    // }
 
     @Post('/logout')
     @HttpCode(204)

@@ -11,6 +11,8 @@ import {UserOutputModel} from "../user/dto/mapper/user.mapper";
 import {UserQueryRepo} from "../user/repositories/user.query.repo";
 import {PostInputType} from "../post/dto/types/post.input.type";
 import {BlogInputType} from "./dto/types/blog.input.type";
+import {Types} from "mongoose";
+import {PostMapper} from "../post/dto/mapper/post.mapper";
 
 @Injectable()
 export class BlogService {
@@ -84,12 +86,17 @@ export class BlogService {
 
     }
 
-    async update(id: string, updateBlogDto: UpdateBlogDto) {
+    async update(id: string, updateBlogDto: UpdateBlogDto, userId: string) {
         const blog: BlogDocument | null = await this.blogQueryRepo.findOne(id);
 
         if (!blog) {
             throw new NotFoundException(`Blog not found`);
         }
+
+        // if (!blog.authorId || blog.authorId !== id) {
+        //     throw new NotFoundException(`User not allowed to update this blog`);
+        // }
+
 
         return await this.blogRepo.update(id, updateBlogDto);
     }

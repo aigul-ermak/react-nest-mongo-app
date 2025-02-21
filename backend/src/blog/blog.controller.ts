@@ -45,8 +45,11 @@ export class BlogController {
 
     @Put(':id')
     @HttpCode(204)
-    async update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
-        return await this.blogService.update(id, updateBlogDto);
+    @UseGuards(JwtAuthGuard)
+    async update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto, @Req() req: Request) {
+        const user = req.user;
+
+        return await this.blogService.update(id, updateBlogDto, user.userId);
     }
 
     @Delete(':id')

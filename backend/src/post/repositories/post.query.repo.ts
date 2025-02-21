@@ -39,12 +39,19 @@ export class PostQueryRepo {
     }
 
     async findAllPostsPaginated(blogId: string, skip: number, limit: number) {
-        return await this.postModel
+        const posts = await this.postModel
             .find({ blogId })
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
             .lean();
+
+        const mappedPosts = posts.map(post => ({
+            ...PostMapper(post),
+        }));
+
+        return mappedPosts;
+
     }
 
 }
