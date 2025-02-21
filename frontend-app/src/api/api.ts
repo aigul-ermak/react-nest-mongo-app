@@ -54,4 +54,42 @@ export const createBlog = async (title, description) => {
     return response.data;
 };
 
+export const updateBlog = async (blogId, title, description) => {
+    try {
+        const response = await api.put(`/blogs/${blogId}`, { title, description });
+        console.log("Blog updated successfully:", response.data); // Debug log
+        return response.data;
+    } catch (error) {
+        console.error("Error updating blog:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const getBlogById = async (blogId) => {
+    try {
+        const response = await api.get(`/blogs/${blogId}`);
+        console.log("Fetched blog details:", response.data); // Debug log
+        return response.data; // Ensure correct structure
+    } catch (error) {
+        console.error("Error fetching blog:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const deleteBlog = async (blogId) => {
+    try {
+        const response = await api.delete(`/blogs/${blogId}`);
+        console.log("Blog deleted successfully:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting blog:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+
+
+
+
+
 

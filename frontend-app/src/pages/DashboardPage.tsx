@@ -1,23 +1,33 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
-import {Card, CardContent, CircularProgress, Container, Pagination, Typography} from "@mui/material";
-import {getBlogs} from "../api/api.ts";
+import { useEffect, useState } from "react";
+import { Card, CardContent, CircularProgress, Container, Pagination, Typography, Button } from "@mui/material";
+import {deleteBlog, getBlogs} from "../api/api.ts";
+import { useAuth } from "../context/AuthContext.tsx";
+import { Link } from "react-router-dom";
 
 const DashboardPage = () => {
+    const { user } = useAuth();
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(5);
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
                 console.log(`Fetching blogs for page ${page}...`);
-                const data = await getBlogs(page);
+                const data = await getBlogs(page, limit);
                 console.log("Received blogs:", data);
 
-                setBlogs(data.blog || []);
+                if (data.blog) {
+                    setBlogs(data.blog);
+                } else {
+                    console.error("Unexpected API response format:", data);
+                    setError("Failed to load blogs.");
+                }
+
                 setTotalPages(data.totalPages || 1);
             } catch (err) {
                 console.error("Error fetching blogs:", err.response?.data || err.message);
@@ -27,7 +37,18 @@ const DashboardPage = () => {
             }
         };
         fetchBlogs();
-    }, [page]); // Re-fetch when page changes
+    }, [page, limit]);
+
+    const handleDelete = async (blogId) => {
+        if (!window.confirm("Are you sure you want to delete this blog?")) return;
+
+        try {
+            await deleteBlog(blogId);
+            setBlogs(blogs.filter((blog) => blog.id !== blogId)); // Remove deleted blog from state
+        } catch (err) {
+            console.error("Error deleting blog:", err);
+        }
+    };
 
     return (
         <Container maxWidth="md">
@@ -36,7 +57,7 @@ const DashboardPage = () => {
             </Typography>
 
             {loading ? (
-                <CircularProgress/>
+                <CircularProgress />
             ) : error ? (
                 <Typography color="error">{error}</Typography>
             ) : blogs.length === 0 ? (
@@ -44,21 +65,32 @@ const DashboardPage = () => {
             ) : (
                 <>
                     {blogs.map((blog) => (
-                        <Card key={blog.id} sx={{marginBottom: 2}}>
+                        <Card key={blog.id} sx={{ marginBottom: 2 }}>
                             <CardContent>
                                 <Typography variant="h6">{blog.title}</Typography>
                                 <Typography>{blog.description}</Typography>
+
+                                {/* Ensure user is defined before checking userId */}
+                                {user && user.userId === blog.authorId && (
+                                    <>
+                                        <Button component={Link} to={`/edit-blog/${blog.id}`} variant="outlined" sx={{ marginRight: 1 }}>
+                                            Edit
+                                        </Button>
+                                        <Button variant="contained" color="error" onClick={() => handleDelete(blog.id)}>
+                                            Delete
+                                        </Button>
+                                    </>
+                                )}
                             </CardContent>
                         </Card>
                     ))}
 
-                    {/* Pagination UI */}
                     <Pagination
                         count={totalPages}
                         page={page}
                         onChange={(event, value) => setPage(value)}
                         color="primary"
-                        sx={{display: "flex", justifyContent: "center", marginTop: 3}}
+                        sx={{ display: "flex", justifyContent: "center", marginTop: 3 }}
                     />
                 </>
             )}
