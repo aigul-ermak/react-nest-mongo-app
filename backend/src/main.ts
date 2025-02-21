@@ -10,9 +10,7 @@ async function bootstrap() {
 
     app.enableCors({
         origin: (origin, callback) => {
-            const allowedOrigins = [
-                "https://react-nest-mongo-app-seven.vercel.app",
-            ];
+            const allowedOrigins = "https://react-nest-mongo-app-seven.vercel.app";
 
             // console.log(`Request Origin: ${origin}`);
 
