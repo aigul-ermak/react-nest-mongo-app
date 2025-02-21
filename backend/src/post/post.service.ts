@@ -65,12 +65,16 @@ export class PostService {
         return PostMapper(post);
     }
 
-    async update(id: string, updatePostDto: UpdatePostDto) {
+    async update(id: string, updatePostDto: UpdatePostDto, userId: string) {
         const post = await this.postQueryRepo.findOne(id);
 
         if (!post) {
             throw new NotFoundException('Post not found');
         }
+
+        // if (post.authorId !== userId) {
+        //     throw new ForbiddenException('You do not have permission to edit this post');
+        // }
 
         const updatedPost = await this.postRepo.update(
             id, updatePostDto);

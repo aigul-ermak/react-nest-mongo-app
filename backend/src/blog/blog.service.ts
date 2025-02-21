@@ -11,14 +11,15 @@ import {UserOutputModel} from "../user/dto/mapper/user.mapper";
 import {UserQueryRepo} from "../user/repositories/user.query.repo";
 import {PostInputType} from "../post/dto/types/post.input.type";
 import {BlogInputType} from "./dto/types/blog.input.type";
-import {Types} from "mongoose";
 import {PostMapper} from "../post/dto/mapper/post.mapper";
+import {PostRepo} from "../post/repositories/post.repo";
 
 @Injectable()
 export class BlogService {
 
     constructor(
         private readonly blogRepo: BlogRepo,
+        private readonly postRepo: PostRepo,
         private readonly blogQueryRepo: BlogQueryRepo,
         private readonly postQueryRepo: PostQueryRepo,
         private readonly userQueryRepo: UserQueryRepo,
@@ -37,9 +38,27 @@ export class BlogService {
             authorId: user.id
         }
 
-       const newBlog = await this.blogRepo.create(newCreateBlog);
+        const newBlog = await this.blogRepo.create(newCreateBlog);
 
         return BlogMapper(newBlog);
+    }
+
+    async createPostForBlog(createPostDto, userId: string, blogId: string) {
+        const user: UserOutputModel | null = await this.userQueryRepo.findOne(userId);
+
+        if (!user) {
+            throw new NotFoundException(`User not found`);
+        }
+
+        const newCreatePost = {
+            ...createPostDto,
+            blogId: blogId,
+            authorId: user.id
+        }
+
+        const newPost = await this.postRepo.insert(newCreatePost);
+
+        return PostMapper(newPost);
     }
 
     async findAll(page: number, limit: number) {

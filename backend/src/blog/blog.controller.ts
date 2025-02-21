@@ -6,6 +6,7 @@ import {BlogOutputModel} from "./dto/mapper/blog.mapper";
 import {SortPostsDto} from "../post/dto/sort-post.dto";
 import {Request} from "express";
 import {JwtAuthGuard} from "../basics/guards/jwtAuthGuard";
+import {CreatePostDto} from "../post/dto/create-post.dto";
 
 @Controller('blogs')
 export class BlogController {
@@ -17,6 +18,16 @@ export class BlogController {
     async create(@Body() createBlogDto: CreateBlogDto, @Req() req: Request) {
         const user = req.user;
         return await this.blogService.create(createBlogDto, user.userId);
+    }
+
+    @Post('/:id/posts')
+    @UseGuards(JwtAuthGuard)
+    async createPostForBlog(
+        @Param('id') blogId: string,
+        @Body() createPostDto: CreatePostDto,
+        @Req() req: Request) {
+        const user = req.user;
+        return await this.blogService.createPostForBlog(createPostDto, user.userId, blogId);
     }
 
     @Get()

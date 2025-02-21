@@ -41,10 +41,10 @@ export class PostController {
 
     @Put(':id')
     @HttpCode(204)
-    // @UseGuards(JwtAuthGuard)
-    update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-        // const user = req.user;
-        return this.postService.update(id, updatePostDto);
+    @UseGuards(JwtAuthGuard)
+    update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto, @Req() req: Request) {
+        const user = req.user;
+        return this.postService.update(id, updatePostDto, user.userId);
     }
 
 
