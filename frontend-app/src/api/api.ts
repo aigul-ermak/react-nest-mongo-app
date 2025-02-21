@@ -31,10 +31,12 @@ export const register = async (userData: { login: string; email: string; passwor
 // Get current user
 export const getUser = async () => {
     const token = localStorage.getItem("token");
+    console.log(localStorage.getItem("token"));
 
     const response = await api.get("/auth/me", {
         headers: {
             Authorization: `Bearer ${token}`,
+            Accept: "application/json",
         },
     });
     return response.data;
