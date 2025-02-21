@@ -14,14 +14,16 @@ async function bootstrap() {
                 "https://react-nest-mongo-app-seven.vercel.app",
             ];
 
-            if (!origin || origin.startsWith("http://localhost") || allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error("Not allowed by CORS"));
-            }
+            // console.log(`Request Origin: ${origin}`);
+
+            // if (!origin || origin.startsWith("http://localhost") || allowedOrigins.includes(origin)) {
+            //     callback(null, true);
+            // } else {
+            //     callback(new Error("Not allowed by CORS"));
+            // }
         },
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-        credentials: true, // ✅ Important for cookies/authentication
+        credentials: true,
     });
 
     const configService = app.get(ConfigService);
