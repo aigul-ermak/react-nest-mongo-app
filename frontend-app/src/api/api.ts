@@ -87,6 +87,17 @@ export const deleteBlog = async (blogId) => {
     }
 };
 
+export const getPostsByBlogId = async (blogId, page = 1, pageSize = 5) => {
+    try {
+        const response = await api.get(`/blogs/${blogId}/posts?page=${page}&pageSize=${pageSize}`);
+        console.log("Fetched posts for blog:", response.data);
+        return response.data; // The posts are inside "items"
+    } catch (error) {
+        console.error("Error fetching posts:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
 
 
 

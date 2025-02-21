@@ -6,6 +6,8 @@ import LoginPage from "../pages/LoginPage.tsx";
 import {RegisterPage} from "../pages/RegisterPage.tsx";
 import CreateBlogPage from "../pages/CreateBlogPage.tsx";
 import EditBlogPage from "../pages/EditBlogPage.tsx";
+import BlogDetailsPage from "../pages/BlogDetailsPage.tsx";
+import BlogPostsPage from "../pages/BlogPostPage.tsx";
 
 
 const AppRoutes = () => {
@@ -37,6 +39,7 @@ const AppRoutes = () => {
                     </PrivateRoute>
                 }
             />
+            <Route path="/blogs/:id/posts" element={<BlogPostsPage />} />
         </Routes>
     );
 };

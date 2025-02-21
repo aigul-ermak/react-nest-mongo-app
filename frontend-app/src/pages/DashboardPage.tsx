@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CircularProgress, Container, Pagination, Typography, Button } from "@mui/material";
 import {deleteBlog, getBlogs} from "../api/api.ts";
 import { useAuth } from "../context/AuthContext.tsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate  } from "react-router-dom";
 
 const DashboardPage = () => {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -44,7 +45,7 @@ const DashboardPage = () => {
 
         try {
             await deleteBlog(blogId);
-            setBlogs(blogs.filter((blog) => blog.id !== blogId)); // Remove deleted blog from state
+            setBlogs(blogs.filter((blog) => blog.id !== blogId));
         } catch (err) {
             console.error("Error deleting blog:", err);
         }
@@ -65,7 +66,9 @@ const DashboardPage = () => {
             ) : (
                 <>
                     {blogs.map((blog) => (
-                        <Card key={blog.id} sx={{ marginBottom: 2 }}>
+                        <Card   key={blog.id}
+                                sx={{ marginBottom: 2, cursor: "pointer" }}
+                                onClick={() => navigate(`/blogs/${blog.id}/posts`)}>
                             <CardContent>
                                 <Typography variant="h6">{blog.title}</Typography>
                                 <Typography>{blog.description}</Typography>
