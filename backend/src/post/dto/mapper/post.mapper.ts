@@ -10,10 +10,10 @@ export class PostOutputModel {
     updatedAt: Date
 }
 
-export const PostMapper = (post: PostDocument) => {
+export const PostMapper = (post) => {
     const outputModel: PostOutputModel = new PostOutputModel();
 
-    outputModel.id = post._id.toString();
+    outputModel.id = post._id;
     outputModel.title = post.title;
     outputModel.shortDescription = post.shortDescription;
     outputModel.content = post.content;

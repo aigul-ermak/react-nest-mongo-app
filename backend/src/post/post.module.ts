@@ -19,7 +19,7 @@ import {JwtService} from "@nestjs/jwt";
     ],
     controllers: [PostController],
     providers: [PostService, JwtService, PostRepo, PostQueryRepo, BlogQueryRepo, UserQueryRepo],
-    exports: [PostRepo, BlogQueryRepo],
+    exports: [PostRepo,  PostQueryRepo, MongooseModule],
 })
 export class PostModule {
 }

@@ -31,7 +31,7 @@ export class PostQueryRepo {
     }
 
     async findOne(id: string) {
-        return this.postModel.find({id});
+        return this.postModel.findOne({ _id: id });
     }
 
     async countPostsByBlogId(blogId: string): Promise<number> {

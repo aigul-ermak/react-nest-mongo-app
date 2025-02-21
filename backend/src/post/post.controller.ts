@@ -23,8 +23,8 @@ export class PostController {
     findAll(@Query() sortData: SortPostsDto,
             @Req() req: Request) {
 
-        const page = parseInt(sortData.page, 10) || 1;
-        const limit = parseInt(sortData.limit, 10) || 10;
+        const page = sortData.page || 1;
+        const limit = sortData.limit || 10;
 
         return this.postService.findAll(page, limit);
     }

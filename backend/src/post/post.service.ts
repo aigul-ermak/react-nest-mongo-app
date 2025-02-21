@@ -42,7 +42,7 @@ export class PostService {
         const createdPost = await this.postRepo.insert(newCreatePost);
 
         const post = await this.postQueryRepo.findOne(createdPost.id);
-        console.log("post", post)
+
         if (!post) {
             throw new NotFoundException(`Post not found`);
         }
@@ -56,6 +56,7 @@ export class PostService {
 
     async findOne(id: string) {
         const post = await this.postQueryRepo.findOne(id);
+
 
         if (!post) {
             throw new NotFoundException(`Post not found`);

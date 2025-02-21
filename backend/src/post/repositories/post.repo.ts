@@ -15,9 +15,17 @@ export class PostRepo {
     }
 
     async update(id: string, updatePostDto: UpdatePostDto) {
-        return this.postModel
-            .findByIdAndUpdate(id, updatePostDto, {new: true})
-            .exec();
+        const updatedPost = await this.postModel.findByIdAndUpdate(
+            id,
+            { $set: updatePostDto },
+            { new: true, runValidators: true }
+        ).exec();
+
+        if (!updatedPost) {
+            throw new Error(`Post with ID ${id} not found`);
+        }
+
+        return updatedPost;
     }
 
     async remove(id: string) {
