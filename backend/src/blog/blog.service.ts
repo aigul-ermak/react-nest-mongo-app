@@ -7,6 +7,10 @@ import {BlogMapper, BlogOutputModel} from "./dto/mapper/blog.mapper";
 import {BlogDocument} from "./entities/blog.schema";
 import {SortPostsDto} from "../post/dto/sort-post.dto";
 import {PostQueryRepo} from "../post/repositories/post.query.repo";
+import {UserOutputModel} from "../user/dto/mapper/user.mapper";
+import {UserQueryRepo} from "../user/repositories/user.query.repo";
+import {PostInputType} from "../post/dto/types/post.input.type";
+import {BlogInputType} from "./dto/types/blog.input.type";
 
 @Injectable()
 export class BlogService {
@@ -15,11 +19,25 @@ export class BlogService {
         private readonly blogRepo: BlogRepo,
         private readonly blogQueryRepo: BlogQueryRepo,
         private readonly postQueryRepo: PostQueryRepo,
+        private readonly userQueryRepo: UserQueryRepo,
     ) {
     }
 
-    async create(createBlogDto: CreateBlogDto) {
-        return await this.blogRepo.create(createBlogDto);
+    async create(createBlogDto: CreateBlogDto, id: string) {
+        const user: UserOutputModel | null = await this.userQueryRepo.findOne(id);
+
+        if (!user) {
+            throw new NotFoundException(`User not found`);
+        }
+
+        const newCreateBlog: BlogInputType = {
+            ...createBlogDto,
+            authorId: user.id
+        }
+
+       const newBlog = await this.blogRepo.create(newCreateBlog);
+
+        return BlogMapper(newBlog);
     }
 
     async findAll(page: number, limit: number) {

@@ -9,7 +9,7 @@ export class BlogOutputModel {
     updatedAt: Date
 }
 
-export const BlogMapper = (blog: BlogDocument) => {
+export const BlogMapper = (blog) => {
 
     const outputModel: BlogOutputModel = new BlogOutputModel();
 

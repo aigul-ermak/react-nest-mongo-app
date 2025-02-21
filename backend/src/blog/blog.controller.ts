@@ -1,10 +1,11 @@
-import {Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query, Req} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query, Req, UseGuards} from '@nestjs/common';
 import {CreateBlogDto} from './dto/create-blog.dto';
 import {UpdateBlogDto} from './dto/update-blog.dto';
 import {BlogService} from "./blog.service";
 import {BlogOutputModel} from "./dto/mapper/blog.mapper";
 import {SortPostsDto} from "../post/dto/sort-post.dto";
 import {Request} from "express";
+import {JwtAuthGuard} from "../basics/guards/jwtAuthGuard";
 
 @Controller('blogs')
 export class BlogController {
@@ -12,8 +13,10 @@ export class BlogController {
     }
 
     @Post()
-    async create(@Body() createBlogDto: CreateBlogDto) {
-        return await this.blogService.create(createBlogDto);
+    @UseGuards(JwtAuthGuard)
+    async create(@Body() createBlogDto: CreateBlogDto, @Req() req: Request) {
+        const user = req.user;
+        return await this.blogService.create(createBlogDto, user.userId);
     }
 
     @Get()

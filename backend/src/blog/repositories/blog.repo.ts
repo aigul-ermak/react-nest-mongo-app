@@ -8,9 +8,9 @@ export class BlogRepo {
     constructor(@InjectModel(Blog.name) private blogModel: Model<BlogDocument>) {
     }
 
-    async create(createBlogDto: CreateBlogDto): Promise<Blog> {
-        const blog = new this.blogModel({...createBlogDto});
-        return await blog.save();
+    async create(newCreateBlog) {
+        const res = await this.blogModel.insertMany(newCreateBlog);
+        return res[0];
     }
 
     async update(id: string, updateBlogDto: UpdateBlogDto): Promise<Blog> {
