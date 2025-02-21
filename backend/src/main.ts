@@ -10,7 +10,12 @@ async function bootstrap() {
 
     app.enableCors({
         origin: (origin, callback) => {
-            if (!origin || origin.startsWith("http://localhost")) {
+            const allowedOrigins = [
+                "http://localhost:3000",
+                "https://react-nest-mongo-app-seven.vercel.app"
+            ];
+
+            if (!origin || allowedOrigins.includes(origin)) {
                 callback(null, true);
             } else {
                 callback(new Error("Not allowed by CORS"));
