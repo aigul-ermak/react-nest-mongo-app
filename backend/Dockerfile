@@ -5,7 +5,7 @@ FROM node:18
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY package.json ./
+COPY backend/package.json ./
 
 # Install dependencies
 RUN yarn install
