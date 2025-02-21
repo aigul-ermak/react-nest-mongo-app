@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { TextField, Button, Container, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import {useState} from 'react';
+import {useAuth} from "../context/AuthContext";
+import {Button, Container, TextField, Typography} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 
 const LoginPage = () => {
-    const { loginUser } = useAuth();
+    const {loginUser} = useAuth();
     const [loginOrEmail, setLoginOrEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");

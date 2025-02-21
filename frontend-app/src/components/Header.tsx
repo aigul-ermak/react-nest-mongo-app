@@ -1,21 +1,21 @@
 import * as React from 'react';
-import { AppBar, Toolbar, Button, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import {AppBar, Button, Toolbar, Typography} from "@mui/material";
+import {Link} from "react-router-dom";
+import {useAuth} from "../context/AuthContext";
 
 const Header = () => {
-    const { user, logoutUser } = useAuth();
+    const {user, logoutUser} = useAuth();
 
     return (
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" sx={{flexGrow: 1}}>
                     My App
                 </Typography>
 
                 {user ? (
                     <>
-                        <Typography variant="subtitle1" sx={{ marginRight: 2 }}>
+                        <Typography variant="subtitle1" sx={{marginRight: 2}}>
                             Welcome, {user.login}
                         </Typography>
                         <Button color="inherit" onClick={logoutUser}>

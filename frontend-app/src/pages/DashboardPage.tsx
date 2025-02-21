@@ -1,30 +1,67 @@
 import * as React from 'react';
-import { useAuth } from "../context/AuthContext";
-import { Container, Typography, Card, CardContent, Button } from "@mui/material";
-import LogoutButton from "../components/LogoutButton";
+import {useEffect, useState} from 'react';
+import {Card, CardContent, CircularProgress, Container, Pagination, Typography} from "@mui/material";
+import {getBlogs} from "../api/api.ts";
 
 const DashboardPage = () => {
-    const { user } = useAuth();
+    const [blogs, setBlogs] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    useEffect(() => {
+        const fetchBlogs = async () => {
+            try {
+                console.log(`Fetching blogs for page ${page}...`);
+                const data = await getBlogs(page);
+                console.log("Received blogs:", data);
+
+                setBlogs(data.blog || []);
+                setTotalPages(data.totalPages || 1);
+            } catch (err) {
+                console.error("Error fetching blogs:", err.response?.data || err.message);
+                setError("Failed to load blogs.");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchBlogs();
+    }, [page]); // Re-fetch when page changes
 
     return (
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
             <Typography variant="h4" align="center" gutterBottom>
-                Welcome to Your Dashboard
+                Blog Posts
             </Typography>
 
-            {user ? (
-                <Card>
-                    <CardContent>
-                        <Typography variant="h6">User Info</Typography>
-                        <Typography>Email: {user.email}</Typography>
-                        <Typography>Login: {user.login}</Typography>
-                    </CardContent>
-                </Card>
+            {loading ? (
+                <CircularProgress/>
+            ) : error ? (
+                <Typography color="error">{error}</Typography>
+            ) : blogs.length === 0 ? (
+                <Typography>No blogs found.</Typography>
             ) : (
-                <Typography color="error">User not found</Typography>
-            )}
+                <>
+                    {blogs.map((blog) => (
+                        <Card key={blog.id} sx={{marginBottom: 2}}>
+                            <CardContent>
+                                <Typography variant="h6">{blog.title}</Typography>
+                                <Typography>{blog.description}</Typography>
+                            </CardContent>
+                        </Card>
+                    ))}
 
-            <LogoutButton />
+                    {/* Pagination UI */}
+                    <Pagination
+                        count={totalPages}
+                        page={page}
+                        onChange={(event, value) => setPage(value)}
+                        color="primary"
+                        sx={{display: "flex", justifyContent: "center", marginTop: 3}}
+                    />
+                </>
+            )}
         </Container>
     );
 };
