@@ -74,7 +74,7 @@ export class AuthController {
     @HttpCode(204)
     async registration(
         @Body() createUserDto: CreateUserDto) {
-        console.log("createUserDto", createUserDto)
+
         return this.authService.create(createUserDto);
     }
 

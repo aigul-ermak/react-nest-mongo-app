@@ -135,7 +135,7 @@ export class AuthService {
 
     async getUser(id: string) {
         const user = await this.userQueryRepo.findOne(id);
-        console.log("user", user)
+
         if (!user) {
             throw new UnauthorizedException('User not found');
         }
