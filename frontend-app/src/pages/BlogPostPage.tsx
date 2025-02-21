@@ -75,22 +75,25 @@ const BlogPostsPage = () => {
                                 <Typography variant="h6">{post.title}</Typography>
                                 <Typography>{post.shortDescription}</Typography>
                                 <Typography>{post.content}</Typography>
-                                <Box mt={2} display="flex" gap={2}>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => navigate(`/edit-post/${post.id}`)}
-                                    >
-                                        Edit
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        color="error"
-                                        onClick={() => handleDelete(post.id)}
-                                    >
-                                        Delete
-                                    </Button>
-                                </Box>
+                                {/* Show Edit & Delete buttons only if the user is authenticated */}
+                                {user && (
+                                    <Box mt={2} display="flex" gap={2}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => navigate(`/edit-post/${post.id}`)}
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            color="error"
+                                            onClick={() => handleDelete(post.id)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </Box>
+                                )}
                             </CardContent>
                         </Card>
                     ))}
