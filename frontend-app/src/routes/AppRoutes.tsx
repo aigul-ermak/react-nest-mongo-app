@@ -4,6 +4,7 @@ import PrivateRoute from "./PrivateRoute.tsx";
 import DashboardPage from "../pages/DashboardPage.tsx";
 import LoginPage from "../pages/LoginPage.tsx";
 import {RegisterPage} from "../pages/RegisterPage.tsx";
+import CreateBlogPage from "../pages/CreateBlogPage.tsx";
 
 
 const AppRoutes = () => {
@@ -16,6 +17,14 @@ const AppRoutes = () => {
                 element={
                     <PrivateRoute>
                         <DashboardPage/>
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/create-blog"
+                element={
+                    <PrivateRoute>
+                        <CreateBlogPage />
                     </PrivateRoute>
                 }
             />

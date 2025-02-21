@@ -18,6 +18,9 @@ const Header = () => {
                         <Typography variant="subtitle1" sx={{marginRight: 2}}>
                             Welcome, {user.login}
                         </Typography>
+                        <Button color="inherit" component={Link} to="/create-blog">
+                            Create Blog
+                        </Button>
                         <Button color="inherit" onClick={logoutUser}>
                             Logout
                         </Button>

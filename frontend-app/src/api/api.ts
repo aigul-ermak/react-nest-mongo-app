@@ -49,3 +49,9 @@ export const getBlogs = async (page = 1, limit = 5) => {
     return response.data;
 };
 
+export const createBlog = async (title, description) => {
+    const response = await api.post("/blogs", { title, description });
+    return response.data;
+};
+
+
