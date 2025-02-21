@@ -11,18 +11,17 @@ async function bootstrap() {
     app.enableCors({
         origin: (origin, callback) => {
             const allowedOrigins = [
-                "http://localhost:3000",
-                "https://react-nest-mongo-app-seven.vercel.app"
+                "https://react-nest-mongo-app-seven.vercel.app",
             ];
 
-            if (!origin || allowedOrigins.includes(origin)) {
+            if (!origin || origin.startsWith("http://localhost") || allowedOrigins.includes(origin)) {
                 callback(null, true);
             } else {
                 callback(new Error("Not allowed by CORS"));
             }
         },
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-        credentials: true,
+        credentials: true, // ✅ Important for cookies/authentication
     });
 
     const configService = app.get(ConfigService);
