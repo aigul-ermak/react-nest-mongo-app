@@ -1,18 +1,27 @@
-import * as React from 'react';
+
 import { useEffect, useState } from "react";
 import {Card, CardContent, CircularProgress, Container, Pagination, Typography, Button, Box} from "@mui/material";
 import {deleteBlog, getBlogs} from "../api/api.ts";
 import { useAuth } from "../context/AuthContext.tsx";
-import { Link, useNavigate  } from "react-router-dom";
+import { Link  } from "react-router-dom";
+
+interface Blog {
+    id: string;
+    title: string;
+    description: string;
+    authorId: string;
+}
+
+
+
 
 const DashboardPage = () => {
     const { user } = useAuth();
-    const navigate = useNavigate();
-    const [blogs, setBlogs] = useState([]);
+    const [blogs, setBlogs] = useState<Blog[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(5);
+    const [limit] = useState(5);
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
@@ -35,7 +44,7 @@ const DashboardPage = () => {
         fetchBlogs();
     }, [page, limit]);
 
-    const handleDelete = async (blogId) => {
+    const handleDelete = async (blogId: string) => {
         if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
         try {
@@ -83,13 +92,13 @@ const DashboardPage = () => {
                                     </Button>
                                 </Box>
 
-                                {/* Ensure user is defined before checking userId */}
+                                {}
                                 {user && user.userId === blog.authorId && (
                                     <>
                                         <Button component={Link} to={`/edit-blog/${blog.id}`} variant="outlined" sx={{ marginRight: 1 }}>
                                             Edit
                                         </Button>
-                                        <Button variant="contained" color="error" onClick={() => handleDelete(blog.id)}>
+                                        <Button variant="contained" color="error" onClick={() => handleDelete((blog as any).id)}>
                                             Delete
                                         </Button>
                                     </>
@@ -101,7 +110,7 @@ const DashboardPage = () => {
                     <Pagination
                         count={totalPages}
                         page={page}
-                        onChange={(event, value) => setPage(value)}
+                        onChange={(_, value) => setPage(value)}
                         color="primary"
                         sx={{ display: "flex", justifyContent: "center", marginTop: 3 }}
                     />

@@ -1,17 +1,21 @@
-import * as React from 'react';
+
 import { useEffect, useState } from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {deletePostById, getPostsByBlogId} from "../api/api.ts";
 import {Container, Typography, Card, CardContent, CircularProgress, Pagination, Box, Button} from "@mui/material";
 import {useAuth} from "../context/AuthContext.tsx";
 
-
+interface Post {
+    id: string;
+    title: string;
+    content: string;
+}
 
 const BlogPostsPage = () => {
     const { id } = useParams();
     const { user } = useAuth();
     const navigate = useNavigate()
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [page, setPage] = useState(1);
@@ -20,7 +24,7 @@ const BlogPostsPage = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const data = await getPostsByBlogId(id, page);
+                const data = await getPostsByBlogId(id ?? "", page);
                 setPosts(data.items || []);
                 setTotalPages(data.pagesCount || 1);
             } catch (err) {
@@ -33,7 +37,7 @@ const BlogPostsPage = () => {
         fetchPosts();
     }, [id, page]);
 
-    const handleDelete = async (postId) => {
+    const handleDelete = async (postId: string) => {
         try {
             await deletePostById(postId);
             setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
@@ -73,7 +77,7 @@ const BlogPostsPage = () => {
                         <Card key={post.id} sx={{ marginBottom: 2 }}>
                             <CardContent>
                                 <Typography variant="h6">{post.title}</Typography>
-                                <Typography>{post.shortDescription}</Typography>
+                                {/*<Typography>{post.shortDescription}</Typography>*/}
                                 <Typography>{post.content}</Typography>
                                 {/* Show Edit & Delete buttons only if the user is authenticated */}
                                 {user && (
@@ -102,7 +106,7 @@ const BlogPostsPage = () => {
                     <Pagination
                         count={totalPages}
                         page={page}
-                        onChange={(event, value) => setPage(value)}
+                        onChange={(_, value) => setPage(value)}
                         color="primary"
                         sx={{ display: "flex", justifyContent: "center", marginTop: 3 }}
                     />

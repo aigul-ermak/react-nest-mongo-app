@@ -15,10 +15,7 @@ const EditBlogPage = () => {
     useEffect(() => {
         const fetchBlog = async () => {
             try {
-                console.log(`Fetching blog details for ID: ${id}`);
                 const data = await getBlogById(id);
-                console.log("Fetched blog:", data);
-
                 if (data) {
                     setTitle(data.title || "");
                     setDescription(data.description || "");
@@ -26,7 +23,7 @@ const EditBlogPage = () => {
                     setError("Blog not found.");
                 }
             } catch (err) {
-                console.error("Error fetching blog:", err.response?.data || err.message);
+
                 setError("Failed to load blog details.");
             } finally {
                 setLoading(false);
@@ -35,17 +32,14 @@ const EditBlogPage = () => {
         fetchBlog();
     }, [id]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError("");
 
         try {
-            console.log("Updating blog with ID:", id);
             await updateBlog(id, title, description);
-            console.log("Blog updated successfully.");
             navigate("/"); // Redirect to dashboard after updating
         } catch (err) {
-            console.error("Error updating blog:", err.response?.data || err.message);
             setError("Failed to update blog. Please try again.");
         }
     };

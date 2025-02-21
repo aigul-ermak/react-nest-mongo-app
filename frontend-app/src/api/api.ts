@@ -45,103 +45,103 @@ export const logout = async () => {
     await api.post("/auth/logout");
 };
 
-export const getBlogs = async (page = 1, limit = 5) => {
+export const getBlogs = async (page: number = 1, limit: number = 5) => {
     const response = await api.get(`/blogs?page=${page}&limit=${limit}`);
     return response.data;
 };
 
-export const createBlog = async (title, description) => {
-    const response = await api.post("/blogs", { title, description });
+export const createBlog = async (title: string, description: string) => {
+    const response = await api.post("/blogs", {title, description});
     return response.data;
 };
 
-export const updateBlog = async (blogId, title, description) => {
+export const updateBlog = async (blogId: string |undefined, title: string, description: string) => {
     try {
-        const response = await api.put(`/blogs/${blogId}`, { title, description });
-        console.log("Blog updated successfully:", response.data); // Debug log
+        const response = await api.put(`/blogs/${blogId}`, {title, description});
+
         return response.data;
     } catch (error) {
-        console.error("Error updating blog:", error.response?.data || error.message);
+
         throw error;
     }
 };
 
-export const getBlogById = async (blogId) => {
+export const getBlogById = async (blogId: string |undefined) => {
     try {
         const response = await api.get(`/blogs/${blogId}`);
-        console.log("Fetched blog details:", response.data); // Debug log
+
         return response.data; // Ensure correct structure
     } catch (error) {
-        console.error("Error fetching blog:", error.response?.data || error.message);
+
         throw error;
     }
 };
 
-export const deleteBlog = async (blogId) => {
+export const deleteBlog = async (blogId: string) => {
     try {
         const response = await api.delete(`/blogs/${blogId}`);
-        console.log("Blog deleted successfully:", response.data);
+
         return response.data;
     } catch (error) {
-        console.error("Error deleting blog:", error.response?.data || error.message);
+
         throw error;
     }
 };
 
-export const getPostsByBlogId = async (blogId, page = 1, pageSize = 5) => {
+export const getPostsByBlogId = async (blogId: string, page: number = 1, pageSize: number = 5) => {
     try {
         const response = await api.get(`/blogs/${blogId}/posts?page=${page}&pageSize=${pageSize}`);
-        console.log("Fetched posts for blog:", response.data);
+
         return response.data; // The posts are inside "items"
     } catch (error) {
-        console.error("Error fetching posts:", error.response?.data || error.message);
+
         throw error;
     }
 };
 
-export const createPost = async (blogId, postData) => {
+export const createPost = async (blogId: string, postData: any) => {
     try {
         const response = await api.post(`/blogs/${blogId}/posts`, postData, {
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
         });
         return response.data;
     } catch (error) {
-        console.error("Error creating post:", error.response?.data || error.message);
+
         throw error;
     }
 };
 
 
-export const getPostById = async (postId) => {
+export const getPostById = async (postId: string | undefined) => {
     try {
         const response = await api.get(`/posts/${postId}`);
         return response.data;
     } catch (error) {
-        console.error("Error fetching post:", error.response?.data || error.message);
+
         throw error;
     }
 };
 
 
-export const updatePostById = async (id, updatedPost) => {
+export const updatePostById = async (id: string | undefined, updatedPost: any) => {
     try {
         const response = await api.put(`/posts/${id}`, updatedPost, {
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
         });
         return response.data;
     } catch (error) {
-        console.error("Error updating post:", error.response?.data || error.message);
+
         throw error;
     }
 };
 
-export const deletePostById = async (postId) => {
+export const deletePostById = async (postId: string) => {
     try {
-        const response = await api.delete(`/posts/${postId}`); // ✅ Corrected endpoint
-        console.log("Post deleted successfully:", response.data);
+        const response = await api.delete(`/posts/${postId}`);
+
         return response.data;
     } catch (error) {
-        console.error("Error deleting post:", error.response?.data || error.message);
+
         throw error;
     }
 };

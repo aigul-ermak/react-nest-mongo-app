@@ -10,15 +10,15 @@ const CreatePostPage = () => {
     const [post, setPost] = useState({ title: "", shortDescription: "", content: "" });
     const [error, setError] = useState("");
 
-    const handleChange = (e) => {
+    const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setPost({ ...post, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            await createPost(id, post); // Send post data to API
-            navigate(`/blogs/${id}/posts`); // Redirect to blog posts page
+            await createPost(id ?? "", post);
+            navigate(`/blogs/${id}/posts`);
         } catch (err) {
             setError("Failed to create post.");
         }

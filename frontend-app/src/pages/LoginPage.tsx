@@ -11,7 +11,7 @@ const LoginPage = () => {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             await loginUser(loginOrEmail, password);

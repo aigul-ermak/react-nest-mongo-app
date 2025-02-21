@@ -1,15 +1,10 @@
 import React, {useState} from "react";
-import {useForm} from "react-hook-form";
-import {Alert, Box, Button, Container, TextField, Typography} from "@mui/material";
+import {Button, Container, TextField, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {api, register} from "../api/api.ts";
+import {register} from "../api/api.ts";
 
 
-interface RegisterForm {
-    login: string;
-    email: string;
-    password: string;
-}
+
 
 export const RegisterPage = () => {
     const [login, setLogin] = useState("");
@@ -17,33 +12,14 @@ export const RegisterPage = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
-    // const {register, handleSubmit, reset,} = useForm<RegisterForm>();
-    // const navigate = useNavigate();
-    // const [error, setError, setServerError] = useState<string | null>(null);
 
-    // const onSubmit = async (data: RegisterForm) => {
-    //     try {
-    //         await register({ login, email, password });
-    //         reset();
-    //         navigate("/login");
-    //     } catch (error) {
-    //         if (error.response?.data?.errorsMessages) {
-    //             const errorMessage = error.response.data.errorsMessages
-    //                 .map((err: { message: string }) => err.message)
-    //                 .join("\n");
-    //             setError(errorMessage);
-    //         } else {
-    //             setError("Registration failed. Please try again.");
-    //         }
-    //     }
-    // };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError("");
 
         try {
-            await register({ login, email, password });
+            await register({login, email, password});
             navigate("/login");
         } catch (err) {
             setError("Registration failed. User may already exist.");
