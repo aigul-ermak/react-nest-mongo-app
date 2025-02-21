@@ -98,6 +98,55 @@ export const getPostsByBlogId = async (blogId, page = 1, pageSize = 5) => {
     }
 };
 
+export const createPost = async (blogId, postData) => {
+    try {
+        const response = await api.post(`/blogs/${blogId}/posts`, postData, {
+            headers: { "Content-Type": "application/json" },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error creating post:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+
+export const getPostById = async (postId) => {
+    try {
+        const response = await api.get(`/posts/${postId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching post:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+
+export const updatePostById = async (id, updatedPost) => {
+    try {
+        const response = await api.put(`/posts/${id}`, updatedPost, {
+            headers: { "Content-Type": "application/json" },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error updating post:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const deletePostById = async (postId) => {
+    try {
+        const response = await api.delete(`/posts/${postId}`); // ✅ Corrected endpoint
+        console.log("Post deleted successfully:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting post:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+
+
 
 
 

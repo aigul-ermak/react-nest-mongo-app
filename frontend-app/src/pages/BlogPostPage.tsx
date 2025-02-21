@@ -1,11 +1,16 @@
 import * as React from 'react';
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getPostsByBlogId } from "../api/api.ts";
-import { Container, Typography, Card, CardContent, CircularProgress, Pagination } from "@mui/material";
+import {useNavigate, useParams} from "react-router-dom";
+import {deletePostById, getPostsByBlogId} from "../api/api.ts";
+import {Container, Typography, Card, CardContent, CircularProgress, Pagination, Box, Button} from "@mui/material";
+import {useAuth} from "../context/AuthContext.tsx";
+
+
 
 const BlogPostsPage = () => {
-    const { id } = useParams(); // Get blog ID from URL
+    const { id } = useParams();
+    const { user } = useAuth();
+    const navigate = useNavigate()
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -15,14 +20,11 @@ const BlogPostsPage = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                console.log(`Fetching posts for blog ${id}...`);
                 const data = await getPostsByBlogId(id, page);
-                console.log("Received posts:", data);
-
                 setPosts(data.items || []);
                 setTotalPages(data.pagesCount || 1);
             } catch (err) {
-                console.error("Error fetching posts:", err.response?.data || err.message);
+
                 setError("Failed to load posts.");
             } finally {
                 setLoading(false);
@@ -31,11 +33,33 @@ const BlogPostsPage = () => {
         fetchPosts();
     }, [id, page]);
 
+    const handleDelete = async (postId) => {
+        try {
+            await deletePostById(postId);
+            setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+        } catch (err) {
+            setError("Failed to delete the post.");
+        }
+    };
+
     return (
         <Container maxWidth="md">
             <Typography variant="h4" align="center" gutterBottom>
                 Blog Posts
             </Typography>
+
+            {/* Create Post Button - Only visible for logged-in users */}
+            {user && (
+                <Box textAlign="center" mb={3}>
+                    <Button
+                        variant="contained"
+                        color="success"
+                        onClick={() => navigate(`/blogs/${id}/create-post`)}
+                    >
+                        Create Post
+                    </Button>
+                </Box>
+            )}
 
             {loading ? (
                 <CircularProgress />
@@ -51,6 +75,22 @@ const BlogPostsPage = () => {
                                 <Typography variant="h6">{post.title}</Typography>
                                 <Typography>{post.shortDescription}</Typography>
                                 <Typography>{post.content}</Typography>
+                                <Box mt={2} display="flex" gap={2}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => navigate(`/edit-post/${post.id}`)}
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        onClick={() => handleDelete(post.id)}
+                                    >
+                                        Delete
+                                    </Button>
+                                </Box>
                             </CardContent>
                         </Card>
                     ))}

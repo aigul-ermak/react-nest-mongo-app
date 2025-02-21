@@ -9,21 +9,24 @@ const Header = () => {
     return (
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="h6" sx={{flexGrow: 1}}>
-                    My App
-                </Typography>
+                <Button color="inherit" component={Link} to="/" sx={{ marginRight: 2 }}>
+                    Home
+                </Button>
+                {/*<Typography variant="h6" sx={{flexGrow: 1}}>*/}
+                {/*    Blog App*/}
+                {/*</Typography>*/}
 
                 {user ? (
                     <>
-                        <Typography variant="subtitle1" sx={{marginRight: 2}}>
-                            Welcome, {user.login}
-                        </Typography>
                         <Button color="inherit" component={Link} to="/create-blog">
                             Create Blog
                         </Button>
                         <Button color="inherit" onClick={logoutUser}>
                             Logout
                         </Button>
+                        <Typography variant="subtitle1" sx={{marginRight: 2}}>
+                            Welcome, {user.login}
+                        </Typography>
                     </>
                 ) : (
                     <>

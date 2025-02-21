@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from "react";
-import { Card, CardContent, CircularProgress, Container, Pagination, Typography, Button } from "@mui/material";
+import {Card, CardContent, CircularProgress, Container, Pagination, Typography, Button, Box} from "@mui/material";
 import {deleteBlog, getBlogs} from "../api/api.ts";
 import { useAuth } from "../context/AuthContext.tsx";
 import { Link, useNavigate  } from "react-router-dom";
@@ -18,20 +18,15 @@ const DashboardPage = () => {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                console.log(`Fetching blogs for page ${page}...`);
                 const data = await getBlogs(page, limit);
-                console.log("Received blogs:", data);
 
                 if (data.blog) {
                     setBlogs(data.blog);
                 } else {
-                    console.error("Unexpected API response format:", data);
                     setError("Failed to load blogs.");
                 }
-
                 setTotalPages(data.totalPages || 1);
             } catch (err) {
-                console.error("Error fetching blogs:", err.response?.data || err.message);
                 setError("Failed to load blogs.");
             } finally {
                 setLoading(false);
@@ -54,7 +49,10 @@ const DashboardPage = () => {
     return (
         <Container maxWidth="md">
             <Typography variant="h4" align="center" gutterBottom>
-                Blog Posts
+                Welcome to our platform!
+            </Typography>
+            <Typography align="center" sx={{ mb: 2 }}>
+                Read blogs and explore content.
             </Typography>
 
             {loading ? (
@@ -67,11 +65,23 @@ const DashboardPage = () => {
                 <>
                     {blogs.map((blog) => (
                         <Card   key={blog.id}
-                                sx={{ marginBottom: 2, cursor: "pointer" }}
-                                onClick={() => navigate(`/blogs/${blog.id}/posts`)}>
+                                sx={{ marginBottom: 2, padding: 2 }}
+                                >
                             <CardContent>
                                 <Typography variant="h6">{blog.title}</Typography>
                                 <Typography>{blog.description}</Typography>
+
+                                <Box mt={2} display="flex" gap={2}>
+                                    {/* See All Posts Button (Public) */}
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        component={Link}
+                                        to={`/blogs/${blog.id}/posts`}
+                                    >
+                                        See All Posts
+                                    </Button>
+                                </Box>
 
                                 {/* Ensure user is defined before checking userId */}
                                 {user && user.userId === blog.authorId && (

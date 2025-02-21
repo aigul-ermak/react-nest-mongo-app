@@ -8,6 +8,8 @@ import CreateBlogPage from "../pages/CreateBlogPage.tsx";
 import EditBlogPage from "../pages/EditBlogPage.tsx";
 import BlogDetailsPage from "../pages/BlogDetailsPage.tsx";
 import BlogPostsPage from "../pages/BlogPostPage.tsx";
+import EditPostPage from "../pages/EditPostPage.tsx";
+import CreatePostPage from "../pages/CreatePostPage.tsx";
 
 
 const AppRoutes = () => {
@@ -15,14 +17,10 @@ const AppRoutes = () => {
         <Routes>
             <Route path="/login" element={<LoginPage/>}/>
             <Route path="/register" element={<RegisterPage/>}/>
-            <Route
-                path="/"
-                element={
-                    <PrivateRoute>
-                        <DashboardPage/>
-                    </PrivateRoute>
-                }
-            />
+            <Route path="/" element={ <DashboardPage/>}/>
+            <Route path="/blogs/:id/posts" element={<BlogPostsPage />} />
+
+
             <Route
                 path="/create-blog"
                 element={
@@ -39,7 +37,22 @@ const AppRoutes = () => {
                     </PrivateRoute>
                 }
             />
-            <Route path="/blogs/:id/posts" element={<BlogPostsPage />} />
+            <Route
+                path="/blogs/:id/create-post"
+                element={
+                    <PrivateRoute>
+                        <CreatePostPage />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/edit-post/:id"
+                element={
+                    <PrivateRoute>
+                        <EditPostPage />
+                    </PrivateRoute>
+                }
+            />
         </Routes>
     );
 };
