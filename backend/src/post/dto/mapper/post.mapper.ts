@@ -6,6 +6,7 @@ export class PostOutputModel {
     title: string;
     shortDescription: string;
     content: string;
+    authorId: string;
     createdAt: Date;
     updatedAt: Date
 }
@@ -17,6 +18,7 @@ export const PostMapper = (post) => {
     outputModel.title = post.title;
     outputModel.shortDescription = post.shortDescription;
     outputModel.content = post.content;
+    outputModel.authorId = post.authorId;
     outputModel.createdAt = post.createdAt;
     outputModel.updatedAt = post.updatedAt;
 
