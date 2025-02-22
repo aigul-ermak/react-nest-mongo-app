@@ -13,12 +13,18 @@ export class JwtAuthGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest<Request>();
 
-
-        const refreshToken = request.cookies?.refreshToken;
-
-        if (!refreshToken) {
-            throw new UnauthorizedException('No valid token found in cookies');
+        const authHeader = request.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            throw new UnauthorizedException('No valid token found in Authorization header');
         }
+
+        const refreshToken = authHeader.split(' ')[1];
+
+        // const refreshToken = request.cookies?.refreshToken;
+        //
+        // if (!refreshToken) {
+        //     throw new UnauthorizedException('No valid token found in cookies');
+        // }
 
         try {
             const secret = this.configService.get<string>('JWT_REFRESH_SECRET');

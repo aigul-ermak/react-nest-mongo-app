@@ -38,15 +38,15 @@ export class AuthController {
             refreshToken
         } = await this.authService.login(loginDto.loginOrEmail, loginDto.password);
 
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'none',
-            domain: 'react-nest-mongo-app.onrender.com',
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+        // res.cookie('refreshToken', refreshToken, {
+        //     httpOnly: true,
+        //     secure: true,
+        //     sameSite: 'none',
+        //     domain: '.onrender.com',
+        //     maxAge: 7 * 24 * 60 * 60 * 1000,
+        // });
 
-        return res.json({accessToken});
+        return res.json({accessToken, refreshToken});
     }
     @Get('/me')
     @HttpCode(200)
@@ -95,11 +95,12 @@ export class AuthController {
 
         await this.authService.logout(id);
 
-        res.clearCookie('refreshToken', {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-        });
+        // res.clearCookie('refreshToken', {
+        //     httpOnly: true,
+        //     secure: true,
+        //     sameSite: 'none',
+        //     domain: '.onrender.com',
+        // });
 
         res.send();
     }
