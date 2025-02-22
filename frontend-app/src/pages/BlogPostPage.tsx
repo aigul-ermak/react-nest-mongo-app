@@ -1,8 +1,7 @@
-
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {deletePostById, getPostsByBlogId, getUsersById} from "../api/api.ts";
-import {Container, Typography, Card, CardContent, CircularProgress, Pagination, Box, Button} from "@mui/material";
+import {Box, Button, Card, CardContent, CircularProgress, Container, Pagination, Typography} from "@mui/material";
 import {useAuth} from "../context/AuthContext.tsx";
 
 interface Post {
@@ -16,8 +15,8 @@ interface Post {
 }
 
 const BlogPostsPage = () => {
-    const { id } = useParams();
-    const { user } = useAuth();
+    const {id} = useParams();
+    const {user} = useAuth();
     const navigate = useNavigate()
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
@@ -29,6 +28,7 @@ const BlogPostsPage = () => {
         const fetchPosts = async () => {
             try {
                 const data = await getPostsByBlogId(id ?? "", page);
+
                 const postsWithAuthor = await Promise.all(
                     data.items.map(async (post: Post) => {
                         const author = await getUsersById(post.authorId);
@@ -39,7 +39,8 @@ const BlogPostsPage = () => {
                     })
                 );
 
-                setPosts(data.items || []);
+
+                setPosts(postsWithAuthor || []);
                 setTotalPages(data.pagesCount || 1);
             } catch (err) {
 
@@ -80,7 +81,7 @@ const BlogPostsPage = () => {
             )}
 
             {loading ? (
-                <CircularProgress />
+                <CircularProgress/>
             ) : error ? (
                 <Typography color="error">{error}</Typography>
             ) : posts.length === 0 ? (
@@ -88,7 +89,7 @@ const BlogPostsPage = () => {
             ) : (
                 <>
                     {posts.map((post) => (
-                        <Card key={post.id} sx={{ marginBottom: 2 }}>
+                        <Card key={post.id} sx={{marginBottom: 2}}>
                             <CardContent>
                                 <Typography variant="h6">{post.title}</Typography>
                                 <Typography>{post.shortDescription}</Typography>
@@ -127,7 +128,7 @@ const BlogPostsPage = () => {
                         page={page}
                         onChange={(_, value) => setPage(value)}
                         color="primary"
-                        sx={{ display: "flex", justifyContent: "center", marginTop: 3 }}
+                        sx={{display: "flex", justifyContent: "center", marginTop: 3}}
                     />
                 </>
             )}
