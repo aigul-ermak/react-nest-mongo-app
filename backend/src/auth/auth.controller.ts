@@ -30,7 +30,7 @@ export class AuthController {
     async login(@Body() loginDto: UserLoginDto,
                 @Req() req: Request,
                 @Res() res: Response) {
-
+        console.log(loginDto);
         //const result = await this.authService.login(loginDto.loginOrEmail, loginDto.password);
 
         const {
@@ -41,7 +41,8 @@ export class AuthController {
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'strict',
+            sameSite: 'none',
+            domain: 'react-nest-mongo-app.onrender.com',
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
