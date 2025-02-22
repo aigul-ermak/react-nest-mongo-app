@@ -3,25 +3,9 @@ import {useNavigate, useParams} from "react-router-dom";
 import {deletePostById, getPostsByBlogId, getUsersById} from "../api/api.ts";
 import {Box, Button, Card, CardContent, CircularProgress, Container, Pagination, Typography} from "@mui/material";
 import {useAuth} from "../context/AuthContext.tsx";
+import {Post} from "../models/Post.tsx";
+import {formatDate} from "../utility/formatDate.tsx";
 
-interface Post {
-    id: string;
-    title: string;
-    shortDescription: string;
-    content: string;
-    authorId: string;
-    authorName: string;
-    createdAt: string;
-}
-
-const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-};
 
 const BlogPostsPage = (): JSX.Element => {
     const {id} = useParams();
@@ -78,7 +62,7 @@ const BlogPostsPage = (): JSX.Element => {
             </Typography>
 
             {/* Create Post Button - Only visible for logged-in users */}
-            {user &&  (
+            {user && (
                 <Box textAlign="center" mb={3}>
                     <Button
                         variant="contained"
@@ -110,7 +94,7 @@ const BlogPostsPage = (): JSX.Element => {
 
 
                                 {/* Show Edit & Delete buttons only if the user is authenticated */}
-                                {user && user.userId === post.authorId &&(
+                                {user && user.userId === post.authorId && (
                                     <Box mt={2} display="flex" gap={2}>
                                         <Button
                                             variant="contained"

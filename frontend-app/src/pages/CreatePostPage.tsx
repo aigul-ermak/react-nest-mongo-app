@@ -2,7 +2,7 @@ import * as React from "react";
 import {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {createPost} from "../api/api.ts";
-import {Container, Typography, TextField, Button, Box} from "@mui/material";
+import {Box, Button, Container, TextField, Typography} from "@mui/material";
 
 const CreatePostPage = () => {
     const {id} = useParams(); // Blog ID from URL
@@ -27,12 +27,12 @@ const CreatePostPage = () => {
     return (
         <Container maxWidth="md"
                    sx={{
-            marginTop: 4,
-            padding: 3,
-            borderRadius: 2,
-            boxShadow: 3,
-            background: "linear-gradient(145deg, #ffffff, #f0f0f0)",
-        }}>
+                       marginTop: 4,
+                       padding: 3,
+                       borderRadius: 2,
+                       boxShadow: 3,
+                       background: "linear-gradient(145deg, #ffffff, #f0f0f0)",
+                   }}>
             <Typography variant="h4"
                         align="center"
                         gutterBottom

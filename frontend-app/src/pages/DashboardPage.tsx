@@ -3,24 +3,8 @@ import {Box, Button, Card, CardContent, CircularProgress, Container, Pagination,
 import {deleteBlog, getBlogs, getUsersById} from "../api/api.ts";
 import {useAuth} from "../context/AuthContext.tsx";
 import {Link} from "react-router-dom";
-
-interface Blog {
-    id: string;
-    title: string;
-    description: string;
-    authorId: string;
-    authorLogin: string;
-    createdAt: string;
-}
-
-const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-};
+import {Blog} from "../models/Blog.tsx";
+import {formatDate} from "../utility/formatDate.tsx";
 
 
 const DashboardPage = (): JSX.Element => {

@@ -4,8 +4,6 @@ import {useNavigate} from "react-router-dom";
 import {register} from "../api/api.ts";
 
 
-
-
 export const RegisterPage = () => {
     const [login, setLogin] = useState("");
     const [email, setEmail] = useState("");
