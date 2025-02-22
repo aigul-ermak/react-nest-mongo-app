@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {JSX, useEffect, useState} from "react";
 import {Box, Button, Card, CardContent, CircularProgress, Container, Pagination, Typography} from "@mui/material";
 import {deleteBlog, getBlogs, getUsersById} from "../api/api.ts";
 import {useAuth} from "../context/AuthContext.tsx";
@@ -23,7 +23,7 @@ const formatDate = (dateString: string): string => {
 };
 
 
-const DashboardPage = () => {
+const DashboardPage = (): JSX.Element => {
     const {user} = useAuth();
     const [blogs, setBlogs] = useState<Blog[]>([]);
     const [loading, setLoading] = useState(true);
@@ -93,14 +93,49 @@ const DashboardPage = () => {
                 <>
                     {blogs.map((blog) => (
                         <Card key={blog.id}
-                              sx={{marginBottom: 2, padding: 2}}
+                              sx={{
+                                  marginBottom: 2,
+                                  padding: 2,
+                                  borderRadius: 2,
+                                  boxShadow: 3,
+                                  transition: "transform 0.2s, box-shadow 0.2s",
+                                  "&:hover": {
+                                      transform: "translateY(-4px)",
+                                      boxShadow: 6,
+                                  },
+                              }}
                         >
-                            <CardContent>
-                                <Typography variant="h6">{blog.title}</Typography>
-                                <Typography>{blog.description}</Typography>
-                                <Typography>{blog.description}</Typography>
-                                <Typography>Author: {blog.authorLogin}</Typography>
-                                <Typography>Created: {formatDate(blog.createdAt)}</Typography>
+                            <CardContent sx={{
+                                padding: 3,
+                                "&:last-child": {
+                                    paddingBottom: 3,
+                                },
+                            }}>
+                                <Typography variant="h6" sx={{
+                                    fontWeight: "bold",
+                                    color: "primary.main",
+                                    marginBottom: 2,
+                                }}>{blog.title}</Typography>
+                                <Typography sx={{
+                                    color: "text.secondary",
+                                    marginBottom: 2,
+                                }}>{blog.description}</Typography>
+                                <Box sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: 1,
+                                    marginBottom: 2,
+                                }}>
+                                    <Typography sx={{
+                                        color: "text.secondary",
+                                        fontSize: "0.875rem",
+                                    }}>Author: {blog.authorLogin}</Typography>
+                                    <Typography sx={{
+                                        color: "text.secondary",
+                                        fontSize: "0.875rem",
+                                    }}>Created: {formatDate(blog.createdAt)}</Typography>
+                                </Box>
+
 
                                 <Box mt={2} display="flex" gap={2}>
                                     {/* See All Posts Button (Public) */}
@@ -109,6 +144,17 @@ const DashboardPage = () => {
                                         color="primary"
                                         component={Link}
                                         to={`/blogs/${blog.id}/posts`}
+                                        sx={{
+                                            textTransform: "none",
+                                            fontWeight: "bold",
+                                            borderRadius: 2,
+                                            paddingX: 3,
+                                            paddingY: 1,
+                                            "&:hover": {
+                                                backgroundColor: "primary.main",
+                                                color: "white",
+                                            },
+                                        }}
                                     >
                                         See All Posts
                                     </Button>
