@@ -37,9 +37,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const loginUser = async (loginOrEmail: string, password: string) => {
         try {
-            const {accessToken} =
+            const {accessToken, refreshToken} =
                 await login(loginOrEmail, password);
             localStorage.setItem("token", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
             const userData = await getUser();
             setUser(userData);
         } catch (error) {

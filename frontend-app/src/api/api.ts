@@ -26,39 +26,55 @@ export const register = async (userData: { login: string; email: string; passwor
 };
 
 export const login = async (loginOrEmail: string, password: string) => {
-    console.log(loginOrEmail, password);
     const response = await api.post("/auth/login", {loginOrEmail, password});
-    console.log("login",response.data)
     return response.data;
 };
 
 // Get current user
 export const getUser = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (!refreshToken) {
+        throw new Error("No refresh token found");
+    }
+
+    const response = await api.get("/auth/me", {
+        headers: {
+            Authorization: `Bearer ${refreshToken}`,
+            Accept: "application/json",
+        },
+    });
+
+    return response.data;
+
     // const token = localStorage.getItem("token");
     // console.log(localStorage.getItem("token"));
-
-    // const response = await api.get("/auth/me", {
-    //         withCredentials: true,
-    //         headers: {
-    //             "Accept": "application/json",
-    //         },
-    //     });
     // console.log("getUser", response.data)
     //     return response.data;
-const response = await api.get("/auth/me", {
-
-            withCredentials: true,
-    headers: {
-        Accept: "application/json",
-    },
-    });
-    console.log("getUser", response.data);
-    return response.data;
+// const response = await api.get("/auth/me", {
+    //         withCredentials: true,
+    // headers: {
+    //     Accept: "application/json",
+    // },
+    // });
+    // console.log("getUser", response.data);
 };
 
 // Logout user and clear session
 export const logout = async () => {
-    await api.post("/auth/logout");
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    if (refreshToken) {
+        await api.post("/auth/logout", {}, {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        });
+    }
+
+    // Clear tokens from localStorage
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    //await api.post("/auth/logout");
 };
 
 export const getBlogs = async (page: number = 1, limit: number = 5) => {
