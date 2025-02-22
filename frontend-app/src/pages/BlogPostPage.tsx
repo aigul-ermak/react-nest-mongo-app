@@ -14,6 +14,15 @@ interface Post {
     createdAt: string;
 }
 
+const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+};
+
 const BlogPostsPage = () => {
     const {id} = useParams();
     const {user} = useAuth();
@@ -39,7 +48,6 @@ const BlogPostsPage = () => {
                     })
                 );
 
-
                 setPosts(postsWithAuthor || []);
                 setTotalPages(data.pagesCount || 1);
             } catch (err) {
@@ -53,6 +61,8 @@ const BlogPostsPage = () => {
     }, [id, page]);
 
     const handleDelete = async (postId: string) => {
+        if (!window.confirm("Are you sure you want to delete this post?")) return;
+
         try {
             await deletePostById(postId);
             setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
@@ -95,7 +105,7 @@ const BlogPostsPage = () => {
                                 <Typography>{post.shortDescription}</Typography>
                                 <Typography>{post.content}</Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    Author: {post.authorName} | Created: {new Date(post.createdAt).toLocaleDateString()}
+                                    Author: {post.authorName} | Created: {formatDate(post.createdAt)}}
                                 </Typography>
 
 
