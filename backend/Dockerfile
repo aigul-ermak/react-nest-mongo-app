@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 3000
 
 # Start the backend application
-CMD ["yarn", "start"]
+CMD ["yarn", "start:dev"]
