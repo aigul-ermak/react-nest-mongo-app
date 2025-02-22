@@ -16,9 +16,6 @@ const App = () => {
                     minHeight: "100vh",
                 }}
             >
-                {/* Footer at the Top */}
-                <Footer />
-
                 {/* Header */}
                 <Header />
 
@@ -31,6 +28,8 @@ const App = () => {
                 >
                     <AppRoutes />
                 </Box>
+                {/* Footer at the Top */}
+                <Footer />
             </Box>
         </AuthProvider>
 
