@@ -6,8 +6,6 @@ export const Footer = () => {
             component="footer"
             sx={{
                 width: "100%",
-                position: "relative",
-                bottom: 0,
                 textAlign: "center",
                 p: 2,
                 bgcolor: "primary.main",
