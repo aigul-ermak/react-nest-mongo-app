@@ -56,7 +56,7 @@ const DashboardPage = () => {
     };
 
     return (
-        <Container maxWidth="md">
+        <Container maxWidth="md" sx={{ mt: 4 }}>
             <Typography variant="h4" align="center" gutterBottom>
                 Welcome to our platform!
             </Typography>
