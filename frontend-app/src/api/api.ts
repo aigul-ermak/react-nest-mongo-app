@@ -1,7 +1,7 @@
 import axios from "axios";
 
-//const API_BASE_URL = "http://localhost:3000";
-const API_BASE_URL = "https://react-nest-mongo-app.onrender.com";
+const API_BASE_URL = "http://localhost:3000";
+//const API_BASE_URL = "https://react-nest-mongo-app.onrender.com";
 
 export const api = axios.create({
     baseURL: API_BASE_URL,
@@ -32,24 +32,24 @@ export const register = async (userData: { login: string; email: string; passwor
 
 // Get current user
 export const getUser = async () => {
-    //const token = localStorage.getItem("token");
-    //console.log(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
+    console.log(localStorage.getItem("token"));
 
-    const response = await api.get("/auth/me", {
-            withCredentials: true, // ✅ Sends cookies automatically
-            headers: {
-                "Accept": "application/json",
-            },
-        });
-    console.log("getUser", response.data)
-        return response.data;
-
-    //     headers: {
-    //         Authorization: `Bearer ${token}`,
-    //         Accept: "application/json",
-    //     },
-    // });
-    // return response.data;
+    // const response = await api.get("/auth/me", {
+    //         withCredentials: true,
+    //         headers: {
+    //             "Accept": "application/json",
+    //         },
+    //     });
+    // console.log("getUser", response.data)
+    //     return response.data;
+const response = await api.get("/auth/me", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+        },
+    });
+    return response.data;
 };
 
 // Logout user and clear session
