@@ -9,10 +9,17 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    if (config.url?.includes("/auth/me") && refreshToken) {
+        // Use refreshToken for /auth/me endpoint
+        config.headers.Authorization = `Bearer ${refreshToken}`;
+    } else if (accessToken) {
+        // Use accessToken for all other endpoints
+        config.headers.Authorization = `Bearer ${accessToken}`;
     }
+
     return config;
 });
 
@@ -32,19 +39,24 @@ export const login = async (loginOrEmail: string, password: string) => {
 
 // Get current user
 export const getUser = async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
-    if (!refreshToken) {
-        throw new Error("No refresh token found");
+    try {
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+            throw new Error("No refresh token found");
+        }
+
+        const response = await api.get("/auth/me", {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+                Accept: "application/json",
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Failed to fetch user:", error);
+        throw error;
     }
-
-    const response = await api.get("/auth/me", {
-        headers: {
-            Authorization: `Bearer ${refreshToken}`,
-            Accept: "application/json",
-        },
-    });
-
-    return response.data;
 
     // const token = localStorage.getItem("token");
     // console.log(localStorage.getItem("token"));
@@ -61,20 +73,22 @@ export const getUser = async () => {
 
 // Logout user and clear session
 export const logout = async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
+    try {
+        const refreshToken = localStorage.getItem("refreshToken");
 
-    if (refreshToken) {
-        await api.post("/auth/logout", {}, {
-            headers: {
-                Authorization: `Bearer ${refreshToken}`,
-            },
-        });
+        if (refreshToken) {
+            await api.post("/auth/logout", {}, {
+                headers: {
+                    Authorization: `Bearer ${refreshToken}`,
+                },
+            });
+        }
+    } catch (error) {
+        console.error("Failed to logout:", error);
+    } finally {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
     }
-
-    // Clear tokens from localStorage
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    //await api.post("/auth/logout");
 };
 
 export const getBlogs = async (page: number = 1, limit: number = 5) => {
@@ -83,17 +97,21 @@ export const getBlogs = async (page: number = 1, limit: number = 5) => {
 };
 
 export const createBlog = async (title: string, description: string) => {
-    const response = await api.post("/blogs", {title, description});
-    return response.data;
+    try {
+        const response = await api.post("/blogs", { title, description });
+        return response.data;
+    } catch (error) {
+        console.error("Failed to create blog:", error);
+        throw error;
+    }
 };
 
 export const updateBlog = async (blogId: string |undefined, title: string, description: string) => {
     try {
-        const response = await api.put(`/blogs/${blogId}`, {title, description});
-
+        const response = await api.put(`/blogs/${blogId}`, { title, description });
         return response.data;
     } catch (error) {
-
+        console.error("Failed to update blog:", error);
         throw error;
     }
 };

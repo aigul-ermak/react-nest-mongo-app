@@ -61,7 +61,7 @@ const DashboardPage = () => {
                 Welcome to our platform!
             </Typography>
             <Typography align="center" sx={{ mb: 2 }}>
-                Read blogs and explore content.
+                Read our blogs and create your own. Register and log in to get started!
             </Typography>
 
             {loading ? (
