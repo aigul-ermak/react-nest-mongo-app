@@ -1,16 +1,4 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    HttpCode,
-    Param,
-    Post,
-    Req,
-    Res,
-    UnauthorizedException,
-    UseGuards
-} from '@nestjs/common';
+import {Body, Controller, Get, HttpCode, Post, Req, Res, UnauthorizedException, UseGuards} from '@nestjs/common';
 import {AuthService} from './auth.service';
 import {CreateUserDto} from "../user/dto/create-user.dto";
 import {UserLoginDto} from "../user/dto/user-login.dto";
@@ -30,7 +18,7 @@ export class AuthController {
     async login(@Body() loginDto: UserLoginDto,
                 @Req() req: Request,
                 @Res() res: Response) {
-        console.log(loginDto);
+        // console.log(loginDto);
         //const result = await this.authService.login(loginDto.loginOrEmail, loginDto.password);
 
         const {
@@ -48,6 +36,7 @@ export class AuthController {
 
         return res.json({accessToken, refreshToken});
     }
+
     @Get('/me')
     @HttpCode(200)
     @UseGuards(JwtAuthGuard)

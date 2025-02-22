@@ -9,7 +9,6 @@ import {SortPostsDto} from "../post/dto/sort-post.dto";
 import {PostQueryRepo} from "../post/repositories/post.query.repo";
 import {UserOutputModel} from "../user/dto/mapper/user.mapper";
 import {UserQueryRepo} from "../user/repositories/user.query.repo";
-import {PostInputType} from "../post/dto/types/post.input.type";
 import {BlogInputType} from "./dto/types/blog.input.type";
 import {PostMapper} from "../post/dto/mapper/post.mapper";
 import {PostRepo} from "../post/repositories/post.repo";
@@ -126,6 +125,8 @@ export class BlogService {
         if (!blog) {
             throw new NotFoundException('Blog not found');
         }
+
+        await this.postRepo.deleteMany({blogId: id});
 
         return await this.blogRepo.delete(id);
     }

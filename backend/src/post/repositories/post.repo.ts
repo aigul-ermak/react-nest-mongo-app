@@ -17,8 +17,8 @@ export class PostRepo {
     async update(id: string, updatePostDto: UpdatePostDto) {
         const updatedPost = await this.postModel.findByIdAndUpdate(
             id,
-            { $set: updatePostDto },
-            { new: true, runValidators: true }
+            {$set: updatePostDto},
+            {new: true, runValidators: true}
         ).exec();
 
         if (!updatedPost) {
@@ -33,4 +33,8 @@ export class PostRepo {
         return result !== null;
     }
 
+    async deleteMany(filter: object): Promise<boolean> {
+        const result = await this.postModel.deleteMany(filter).exec();
+        return result.deletedCount > 0;
+    }
 }
