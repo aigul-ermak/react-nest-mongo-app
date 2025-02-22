@@ -8,7 +8,7 @@ WORKDIR /app
 COPY backend/package.json ./
 
 # Install dependencies
-RUN yarn install
+RUN yarn install --no-bin-links --frozen-lockfile
 
 # Copy the rest of the application code
 COPY . .
