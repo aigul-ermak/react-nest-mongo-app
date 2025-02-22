@@ -100,7 +100,7 @@ const DashboardPage = () => {
                                 <Typography>{blog.description}</Typography>
                                 <Typography>{blog.description}</Typography>
                                 <Typography>Author: {blog.authorLogin}</Typography>
-                                <Typography>Created At: {formatDate(blog.createdAt)}</Typography>
+                                <Typography>Created: {formatDate(blog.createdAt)}</Typography>
 
                                 <Box mt={2} display="flex" gap={2}>
                                     {/* See All Posts Button (Public) */}

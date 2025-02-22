@@ -1,14 +1,18 @@
 
 import { useEffect, useState } from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {deletePostById, getPostsByBlogId} from "../api/api.ts";
+import {deletePostById, getPostsByBlogId, getUsersById} from "../api/api.ts";
 import {Container, Typography, Card, CardContent, CircularProgress, Pagination, Box, Button} from "@mui/material";
 import {useAuth} from "../context/AuthContext.tsx";
 
 interface Post {
     id: string;
     title: string;
+    shortDescription: string;
     content: string;
+    authorId: string;
+    authorName: string;
+    createdAt: string;
 }
 
 const BlogPostsPage = () => {
@@ -25,6 +29,16 @@ const BlogPostsPage = () => {
         const fetchPosts = async () => {
             try {
                 const data = await getPostsByBlogId(id ?? "", page);
+                const postsWithAuthor = await Promise.all(
+                    data.items.map(async (post: Post) => {
+                        const author = await getUsersById(post.authorId);
+                        return {
+                            ...post,
+                            authorName: author.login,
+                        };
+                    })
+                );
+
                 setPosts(data.items || []);
                 setTotalPages(data.pagesCount || 1);
             } catch (err) {
@@ -47,7 +61,7 @@ const BlogPostsPage = () => {
     };
 
     return (
-        <Container maxWidth="md">
+        <Container maxWidth="md" sx={{mt: 4}}>
             <Typography variant="h4" align="center" gutterBottom>
                 Blog Posts
             </Typography>
@@ -77,8 +91,13 @@ const BlogPostsPage = () => {
                         <Card key={post.id} sx={{ marginBottom: 2 }}>
                             <CardContent>
                                 <Typography variant="h6">{post.title}</Typography>
-                                {/*<Typography>{post.shortDescription}</Typography>*/}
+                                <Typography>{post.shortDescription}</Typography>
                                 <Typography>{post.content}</Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                    Author: {post.authorName} | Created: {new Date(post.createdAt).toLocaleDateString()}
+                                </Typography>
+
+
                                 {/* Show Edit & Delete buttons only if the user is authenticated */}
                                 {user && (
                                     <Box mt={2} display="flex" gap={2}>

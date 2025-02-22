@@ -111,7 +111,7 @@ export const createBlog = async (title: string, description: string) => {
             throw new Error("No refresh token found");
         }
 
-        const response = await api.post("/blogs", { title, description }, {
+        const response = await api.post("/blogs", {title, description}, {
             headers: {
                 Authorization: `Bearer ${refreshToken}`,
             },
@@ -124,14 +124,14 @@ export const createBlog = async (title: string, description: string) => {
     }
 };
 
-export const updateBlog = async (blogId: string |undefined, title: string, description: string) => {
+export const updateBlog = async (blogId: string | undefined, title: string, description: string) => {
     try {
         const refreshToken = localStorage.getItem("refreshToken");
         if (!refreshToken) {
             throw new Error("No refresh token found");
         }
 
-        const response = await api.put(`/blogs/${blogId}`, { title, description }, {
+        const response = await api.put(`/blogs/${blogId}`, {title, description}, {
             headers: {
                 Authorization: `Bearer ${refreshToken}`,
             },
@@ -145,7 +145,7 @@ export const updateBlog = async (blogId: string |undefined, title: string, descr
     }
 };
 
-export const getBlogById = async (blogId: string |undefined) => {
+export const getBlogById = async (blogId: string | undefined) => {
     try {
         const response = await api.get(`/blogs/${blogId}`);
 
@@ -191,10 +191,17 @@ export const getPostsByBlogId = async (blogId: string, page: number = 1, pageSiz
 
 export const createPost = async (blogId: string, postData: any) => {
     try {
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+            throw new Error("No refresh token found");
+        }
         const response = await api.post(`/blogs/${blogId}/posts`, postData, {
-            headers: {"Content-Type": "application/json"},
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
         });
         return response.data;
+
     } catch (error) {
 
         throw error;
@@ -215,8 +222,15 @@ export const getPostById = async (postId: string | undefined) => {
 
 export const updatePostById = async (id: string | undefined, updatedPost: any) => {
     try {
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+            throw new Error("No refresh token found");
+        }
+
         const response = await api.put(`/posts/${id}`, updatedPost, {
-            headers: {"Content-Type": "application/json"},
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
         });
         return response.data;
     } catch (error) {
@@ -227,9 +241,19 @@ export const updatePostById = async (id: string | undefined, updatedPost: any) =
 
 export const deletePostById = async (postId: string) => {
     try {
-        const response = await api.delete(`/posts/${postId}`);
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+            throw new Error("No refresh token found");
+        }
+
+        const response = await api.delete(`/posts/${postId}`, {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        });
 
         return response.data;
+
     } catch (error) {
 
         throw error;
