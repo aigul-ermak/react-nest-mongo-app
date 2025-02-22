@@ -29,7 +29,7 @@ const EditPostPage = () => {
         setPost({...post, [e.target.name]: e.target.value});
     };
 
-    const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             await updatePostById(id, post);
@@ -40,12 +40,30 @@ const EditPostPage = () => {
     };
 
     return (
-        <Container maxWidth="md">
-            <Typography variant="h4" align="center" gutterBottom>
+        <Container maxWidth="md"
+                   sx={{
+                       marginTop: 4,
+                       padding: 3,
+                       borderRadius: 2,
+                       boxShadow: 3,
+                       background: "linear-gradient(145deg, #ffffff, #f0f0f0)"
+                   }}>
+            <Typography variant="h4"
+                        align="center"
+                        gutterBottom
+                        sx={{
+                            fontWeight: "bold",
+                            color: "primary.main",
+                            marginBottom: 3,
+                        }}
+            >
                 Edit Post
             </Typography>
 
-            {loading ? <Typography>Loading...</Typography> : error ? <Typography color="error">{error}</Typography> : (
+            {loading ? <Typography>Loading...</Typography> : error ? <Typography color="error" align="center"
+                                                                                 sx={{
+                                                                                     marginBottom: 2,
+                                                                                 }}>{error}</Typography> : (
                 <form onSubmit={handleSubmit}>
                     <TextField
                         fullWidth
@@ -55,6 +73,12 @@ const EditPostPage = () => {
                         onChange={handleChange}
                         margin="normal"
                         required
+                        sx={{
+                            marginBottom: 2,
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: 1,
+                            },
+                        }}
                     />
                     <TextField
                         fullWidth
@@ -64,6 +88,12 @@ const EditPostPage = () => {
                         onChange={handleChange}
                         margin="normal"
                         required
+                        sx={{
+                            marginBottom: 3,
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: 1,
+                            },
+                        }}
                     />
                     <TextField
                         fullWidth
@@ -75,9 +105,26 @@ const EditPostPage = () => {
                         multiline
                         rows={4}
                         required
+                        sx={{
+                            marginBottom: 3,
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: 1,
+                            },
+                        }}
                     />
 
-                    <Button type="submit" variant="contained" color="primary" sx={{mt: 2}}>
+                    <Button type="submit" variant="contained" color="primary"
+                            sx={{
+                                textTransform: "none",
+                                fontWeight: "bold",
+                                borderRadius: 1,
+                                paddingY: 1.5,
+                                fontSize: "1rem",
+                                "&:hover": {
+                                    backgroundColor: "primary.dark",
+                                },
+                            }}
+                    >
                         Save Changes
                     </Button>
                 </form>

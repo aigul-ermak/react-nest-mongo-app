@@ -78,7 +78,7 @@ const BlogPostsPage = (): JSX.Element => {
             </Typography>
 
             {/* Create Post Button - Only visible for logged-in users */}
-            {user && (
+            {user &&  (
                 <Box textAlign="center" mb={3}>
                     <Button
                         variant="contained"
@@ -110,7 +110,7 @@ const BlogPostsPage = (): JSX.Element => {
 
 
                                 {/* Show Edit & Delete buttons only if the user is authenticated */}
-                                {user && (
+                                {user && user.userId === post.authorId &&(
                                     <Box mt={2} display="flex" gap={2}>
                                         <Button
                                             variant="contained"

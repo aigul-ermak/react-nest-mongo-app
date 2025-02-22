@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Container, Typography, TextField, Button, CircularProgress } from "@mui/material";
-import { getBlogById, updateBlog } from "../api/api.ts";
+import {useEffect, useState} from 'react';
+import {useNavigate, useParams} from "react-router-dom";
+import {Button, CircularProgress, Container, TextField, Typography} from "@mui/material";
+import {getBlogById, updateBlog} from "../api/api.ts";
 
 const EditBlogPage = () => {
-    const { id } = useParams(); // Get blog ID from URL
+    const {id} = useParams(); // Get blog ID from URL
     const navigate = useNavigate();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -44,15 +44,29 @@ const EditBlogPage = () => {
         }
     };
 
-    if (loading) return <CircularProgress />;
+    if (loading) return <CircularProgress/>;
     if (error) return <Typography color="error">{error}</Typography>;
 
     return (
-        <Container maxWidth="sm">
-            <Typography variant="h4" align="center" gutterBottom>
+        <Container maxWidth="sm" x={{
+            marginTop: 4,
+            padding: 3,
+            borderRadius: 2,
+            boxShadow: 3,
+            background: "linear-gradient(145deg, #ffffff, #f0f0f0)",
+        }}>
+            <Typography variant="h4" align="center" gutterBottom
+                        sx={{
+                            fontWeight: "bold",
+                            color: "primary.main",
+                            marginBottom: 3,
+                        }}>
                 Edit Blog
             </Typography>
-            {error && <Typography color="error">{error}</Typography>}
+            {error && <Typography color="error" align="center"
+                                  sx={{
+                                      marginBottom: 2,
+                                  }}>{error} </Typography>}
             <form onSubmit={handleSubmit}>
                 <TextField
                     fullWidth
@@ -60,6 +74,12 @@ const EditBlogPage = () => {
                     margin="normal"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    sx={{
+                        marginBottom: 2,
+                        "& .MuiOutlinedInput-root": {
+                            borderRadius: 1,
+                        },
+                    }}
                 />
                 <TextField
                     fullWidth
@@ -69,8 +89,25 @@ const EditBlogPage = () => {
                     rows={4}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    sx={{
+                        marginBottom: 3,
+                        "& .MuiOutlinedInput-root": {
+                            borderRadius: 1,
+                        },
+                    }}
                 />
-                <Button type="submit" variant="contained" color="primary" fullWidth>
+                <Button type="submit" variant="contained" color="primary" fullWidth
+                        sx={{
+                            textTransform: "none",
+                            fontWeight: "bold",
+                            borderRadius: 1,
+                            paddingY: 1.5,
+                            fontSize: "1rem",
+                            "&:hover": {
+                                backgroundColor: "primary.dark",
+                            },
+                        }}
+                >
                     Update Blog
                 </Button>
             </form>

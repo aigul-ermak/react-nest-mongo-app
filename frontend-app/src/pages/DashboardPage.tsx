@@ -38,7 +38,6 @@ const DashboardPage = (): JSX.Element => {
                 const data = await getBlogs(page, limit);
 
                 if (data.blog) {
-                    // Fetch author login for each blog
                     const blogsWithAuthor = await Promise.all(
                         data.blog.map(async (blog: Blog) => {
                             const author = await getUsersById(blog.authorId);
@@ -164,11 +163,32 @@ const DashboardPage = (): JSX.Element => {
                                 {user && user.userId === blog.authorId && (
                                     <Box sx={{mt: 4}}>
                                         <Button component={Link} to={`/edit-blog/${blog.id}`} variant="outlined"
-                                                sx={{marginRight: 1}}>
+                                                sx={{
+                                                    textTransform: "none",
+                                                    fontWeight: "bold",
+                                                    borderRadius: 2,
+                                                    paddingX: 3,
+                                                    paddingY: 1,
+                                                    "&:hover": {
+                                                        backgroundColor: "primary.main",
+                                                        color: "white",
+                                                    },
+                                                    marginRight: 1,
+                                                }}>
                                             Edit
                                         </Button>
                                         <Button variant="contained" color="error"
-                                                onClick={() => handleDelete((blog as any).id)}>
+                                                onClick={() => handleDelete((blog as any).id)}
+                                                sx={{
+                                                    textTransform: "none",
+                                                    fontWeight: "bold",
+                                                    borderRadius: 2,
+                                                    paddingX: 3,
+                                                    paddingY: 1,
+                                                    "&:hover": {
+                                                        backgroundColor: "error.dark",
+                                                    },
+                                                }}>
                                             Delete
                                         </Button>
                                     </Box>

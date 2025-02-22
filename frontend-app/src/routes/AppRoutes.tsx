@@ -9,9 +9,10 @@ import EditBlogPage from "../pages/EditBlogPage.tsx";
 import BlogPostsPage from "../pages/BlogPostPage.tsx";
 import EditPostPage from "../pages/EditPostPage.tsx";
 import CreatePostPage from "../pages/CreatePostPage.tsx";
+import {JSX} from "react";
 
 
-const AppRoutes = () => {
+const AppRoutes = (): JSX.Element=> {
     return (
         <Routes>
             <Route path="/login" element={<LoginPage/>}/>

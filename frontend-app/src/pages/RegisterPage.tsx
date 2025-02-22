@@ -28,11 +28,31 @@ export const RegisterPage = () => {
 
 
     return (
-        <Container maxWidth="xs">
-            <Typography variant="h4" align="center" gutterBottom>
+        <Container maxWidth="xs"
+                   sx={{
+                       marginTop: 8,
+                       padding: 3,
+                       borderRadius: 2,
+                       boxShadow: 3,
+                       background: "linear-gradient(145deg, #ffffff, #f0f0f0)",
+                   }}
+        >
+            <Typography variant="h4"
+                        align="center"
+                        gutterBottom
+                        sx={{
+                            fontWeight: "bold",
+                            color: "primary.main",
+                            marginBottom: 3,
+                        }}
+            >
                 Register
             </Typography>
-            {error && <Typography color="error">{error}</Typography>}
+            {error && <Typography color="error"
+                                  align="center"
+                                  sx={{
+                                      marginBottom: 2,
+                                  }}>{error}</Typography>}
             <form onSubmit={handleSubmit}>
                 <TextField
                     fullWidth
@@ -40,6 +60,12 @@ export const RegisterPage = () => {
                     margin="normal"
                     value={login}
                     onChange={(e) => setLogin(e.target.value)}
+                    sx={{
+                        marginBottom: 2,
+                        "& .MuiOutlinedInput-root": {
+                            borderRadius: 1,
+                        },
+                    }}
                 />
                 <TextField
                     fullWidth
@@ -48,6 +74,12 @@ export const RegisterPage = () => {
                     margin="normal"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    sx={{
+                        marginBottom: 2,
+                        "& .MuiOutlinedInput-root": {
+                            borderRadius: 1,
+                        },
+                    }}
                 />
                 <TextField
                     fullWidth
@@ -56,8 +88,27 @@ export const RegisterPage = () => {
                     margin="normal"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    sx={{
+                        marginBottom: 3,
+                        "& .MuiOutlinedInput-root": {
+                            borderRadius: 1,
+                        },
+                    }}
                 />
-                <Button type="submit" variant="contained" color="primary" fullWidth>
+                <Button type="submit"
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        sx={{
+                            textTransform: "none",
+                            fontWeight: "bold",
+                            borderRadius: 1,
+                            paddingY: 1.5,
+                            fontSize: "1rem",
+                            "&:hover": {
+                                backgroundColor: "primary.dark",
+                            },
+                        }}>
                     Register
                 </Button>
             </form>
