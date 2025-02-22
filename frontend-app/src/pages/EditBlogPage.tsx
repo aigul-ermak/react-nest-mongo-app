@@ -48,13 +48,14 @@ const EditBlogPage = () => {
     if (error) return <Typography color="error">{error}</Typography>;
 
     return (
-        <Container maxWidth="sm" x={{
-            marginTop: 4,
-            padding: 3,
-            borderRadius: 2,
-            boxShadow: 3,
-            background: "linear-gradient(145deg, #ffffff, #f0f0f0)",
-        }}>
+        <Container maxWidth="sm"
+                   sx={{
+                       marginTop: 4,
+                       padding: 3,
+                       borderRadius: 2,
+                       boxShadow: 3,
+                       background: "linear-gradient(145deg, #ffffff, #f0f0f0)",
+                   }}>
             <Typography variant="h4" align="center" gutterBottom
                         sx={{
                             fontWeight: "bold",
