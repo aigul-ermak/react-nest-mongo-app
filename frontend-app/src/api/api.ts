@@ -66,17 +66,6 @@ export const getUser = async () => {
         throw error;
     }
 
-    // const token = localStorage.getItem("token");
-    // console.log(localStorage.getItem("token"));
-    // console.log("getUser", response.data)
-    //     return response.data;
-// const response = await api.get("/auth/me", {
-    //         withCredentials: true,
-    // headers: {
-    //     Accept: "application/json",
-    // },
-    // });
-    // console.log("getUser", response.data);
 };
 
 // Logout user and clear session
