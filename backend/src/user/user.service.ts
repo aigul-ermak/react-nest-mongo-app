@@ -1,6 +1,5 @@
 import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
 import {CreateUserDto} from './dto/create-user.dto';
-import {UpdateUserDto} from './dto/update-user.dto';
 import {UserRepo} from "./repositories/user.repo";
 import {UserQueryRepo} from "./repositories/user.query.repo";
 import {User} from "./entities/user.entity";
@@ -37,16 +36,8 @@ export class UserService {
         return await this.userQueryRepo.findOne(userId);
     }
 
-    findAll() {
-        return `This action returns all user`;
-    }
-
-    findOne(id: number) {
-        return `This action returns a #${id} user`;
-    }
-
-    update(id: number, updateUserDto: UpdateUserDto) {
-        return `This action updates a #${id} user`;
+    async findOne(id: string) {
+        return await this.userQueryRepo.findOne(id);
     }
 
     async remove(id: string) {
@@ -57,6 +48,5 @@ export class UserService {
         }
 
         return await this.userRepo.remove(id);
-
     }
 }
