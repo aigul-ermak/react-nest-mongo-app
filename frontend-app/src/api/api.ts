@@ -23,7 +23,15 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+export const getUsersById = async (id: string) => {
+    try {
+        const response = await api.get(`/users/${id}`);
+        return response.data;
+    } catch (error) {
 
+        throw error;
+    }
+};
 
 
 // RegisterPage new user

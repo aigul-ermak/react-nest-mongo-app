@@ -1,22 +1,30 @@
-
-import { useEffect, useState } from "react";
-import {Card, CardContent, CircularProgress, Container, Pagination, Typography, Button, Box} from "@mui/material";
-import {deleteBlog, getBlogs} from "../api/api.ts";
-import { useAuth } from "../context/AuthContext.tsx";
-import { Link  } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Box, Button, Card, CardContent, CircularProgress, Container, Pagination, Typography} from "@mui/material";
+import {deleteBlog, getBlogs, getUsersById} from "../api/api.ts";
+import {useAuth} from "../context/AuthContext.tsx";
+import {Link} from "react-router-dom";
 
 interface Blog {
     id: string;
     title: string;
     description: string;
     authorId: string;
+    authorLogin: string;
+    createdAt: string;
 }
 
-
+const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+};
 
 
 const DashboardPage = () => {
-    const { user } = useAuth();
+    const {user} = useAuth();
     const [blogs, setBlogs] = useState<Blog[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -30,7 +38,18 @@ const DashboardPage = () => {
                 const data = await getBlogs(page, limit);
 
                 if (data.blog) {
-                    setBlogs(data.blog);
+                    // Fetch author login for each blog
+                    const blogsWithAuthor = await Promise.all(
+                        data.blog.map(async (blog: Blog) => {
+                            const author = await getUsersById(blog.authorId);
+                            return {
+                                ...blog,
+                                authorLogin: author.login,
+                            };
+                        })
+                    );
+
+                    setBlogs(blogsWithAuthor);
                 } else {
                     setError("Failed to load blogs.");
                 }
@@ -56,16 +75,16 @@ const DashboardPage = () => {
     };
 
     return (
-        <Container maxWidth="md" sx={{ mt: 4 }}>
+        <Container maxWidth="md" sx={{mt: 4}}>
             <Typography variant="h4" align="center" gutterBottom>
                 Welcome to our platform!
             </Typography>
-            <Typography align="center" sx={{ mb: 2 }}>
+            <Typography align="center" sx={{mb: 2}}>
                 Read our blogs and create your own. Register and log in to get started!
             </Typography>
 
             {loading ? (
-                <CircularProgress />
+                <CircularProgress/>
             ) : error ? (
                 <Typography color="error">{error}</Typography>
             ) : blogs.length === 0 ? (
@@ -73,12 +92,15 @@ const DashboardPage = () => {
             ) : (
                 <>
                     {blogs.map((blog) => (
-                        <Card   key={blog.id}
-                                sx={{ marginBottom: 2, padding: 2 }}
-                                >
+                        <Card key={blog.id}
+                              sx={{marginBottom: 2, padding: 2}}
+                        >
                             <CardContent>
                                 <Typography variant="h6">{blog.title}</Typography>
                                 <Typography>{blog.description}</Typography>
+                                <Typography>{blog.description}</Typography>
+                                <Typography>Author: {blog.authorLogin}</Typography>
+                                <Typography>Created At: {formatDate(blog.createdAt)}</Typography>
 
                                 <Box mt={2} display="flex" gap={2}>
                                     {/* See All Posts Button (Public) */}
@@ -94,14 +116,16 @@ const DashboardPage = () => {
 
                                 {}
                                 {user && user.userId === blog.authorId && (
-                                    <>
-                                        <Button component={Link} to={`/edit-blog/${blog.id}`} variant="outlined" sx={{ marginRight: 1 }}>
+                                    <Box sx={{mt: 4}}>
+                                        <Button component={Link} to={`/edit-blog/${blog.id}`} variant="outlined"
+                                                sx={{marginRight: 1}}>
                                             Edit
                                         </Button>
-                                        <Button variant="contained" color="error" onClick={() => handleDelete((blog as any).id)}>
+                                        <Button variant="contained" color="error"
+                                                onClick={() => handleDelete((blog as any).id)}>
                                             Delete
                                         </Button>
-                                    </>
+                                    </Box>
                                 )}
                             </CardContent>
                         </Card>
@@ -112,7 +136,7 @@ const DashboardPage = () => {
                         page={page}
                         onChange={(_, value) => setPage(value)}
                         color="primary"
-                        sx={{ display: "flex", justifyContent: "center", marginTop: 3 }}
+                        sx={{display: "flex", justifyContent: "center", marginTop: 3}}
                     />
                 </>
             )}
