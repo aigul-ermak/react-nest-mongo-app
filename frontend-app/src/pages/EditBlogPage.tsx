@@ -5,7 +5,7 @@ import {Button, CircularProgress, Container, TextField, Typography} from "@mui/m
 import {getBlogById, updateBlog} from "../api/api.ts";
 
 const EditBlogPage = () => {
-    const {id} = useParams(); // Get blog ID from URL
+    const {id} = useParams(); 
     const navigate = useNavigate();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -38,7 +38,7 @@ const EditBlogPage = () => {
 
         try {
             await updateBlog(id, title, description);
-            navigate("/"); // Redirect to dashboard after updating
+            navigate("/");
         } catch (err) {
             setError("Failed to update blog. Please try again.");
         }
