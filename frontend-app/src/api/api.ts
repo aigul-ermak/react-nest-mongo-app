@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3000";
-//const API_BASE_URL = "https://react-nest-mongo-app.onrender.com";
+//const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "https://react-nest-mongo-app.onrender.com";
 
 export const api = axios.create({
     baseURL: API_BASE_URL,
@@ -17,12 +17,7 @@ api.interceptors.request.use((config) => {
 });
 
 
-export const login = async (loginOrEmail: string, password: string) => {
-    console.log(loginOrEmail, password);
-    const response = await api.post("/auth/login", {loginOrEmail, password});
-    console.log("login",response.data)
-    return response.data;
-};
+
 
 // RegisterPage new user
 export const register = async (userData: { login: string; email: string; password: string }) => {
@@ -30,10 +25,17 @@ export const register = async (userData: { login: string; email: string; passwor
     return response.status;
 };
 
+export const login = async (loginOrEmail: string, password: string) => {
+    console.log(loginOrEmail, password);
+    const response = await api.post("/auth/login", {loginOrEmail, password});
+    console.log("login",response.data)
+    return response.data;
+};
+
 // Get current user
 export const getUser = async () => {
-    const token = localStorage.getItem("token");
-    console.log(localStorage.getItem("token"));
+    // const token = localStorage.getItem("token");
+    // console.log(localStorage.getItem("token"));
 
     // const response = await api.get("/auth/me", {
     //         withCredentials: true,
@@ -44,12 +46,13 @@ export const getUser = async () => {
     // console.log("getUser", response.data)
     //     return response.data;
 const response = await api.get("/auth/me", {
-        headers: {
+
             withCredentials: true,
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-        },
+    headers: {
+        Accept: "application/json",
+    },
     });
+    console.log("getUser", response.data);
     return response.data;
 };
 
