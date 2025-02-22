@@ -74,7 +74,7 @@ const BlogPostsPage = (): JSX.Element => {
     return (
         <Container maxWidth="md" sx={{mt: 4}}>
             <Typography variant="h4" align="center" gutterBottom>
-                Blog Posts
+                All Posts
             </Typography>
 
             {/* Create Post Button - Only visible for logged-in users */}

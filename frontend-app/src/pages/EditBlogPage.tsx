@@ -5,7 +5,7 @@ import {Button, CircularProgress, Container, TextField, Typography} from "@mui/m
 import {getBlogById, updateBlog} from "../api/api.ts";
 
 const EditBlogPage = () => {
-    const {id} = useParams(); 
+    const {id} = useParams();
     const navigate = useNavigate();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");

@@ -171,7 +171,7 @@ export const getPostsByBlogId = async (blogId: string, page: number = 1, pageSiz
     try {
         const response = await api.get(`/blogs/${blogId}/posts?page=${page}&pageSize=${pageSize}`);
 
-        return response.data; // The posts are inside "items"
+        return response.data;
     } catch (error) {
 
         throw error;
