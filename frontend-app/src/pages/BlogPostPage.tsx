@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {JSX, useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {deletePostById, getPostsByBlogId, getUsersById} from "../api/api.ts";
 import {Box, Button, Card, CardContent, CircularProgress, Container, Pagination, Typography} from "@mui/material";
@@ -23,7 +23,7 @@ const formatDate = (dateString: string): string => {
     });
 };
 
-const BlogPostsPage = () => {
+const BlogPostsPage = (): JSX.Element => {
     const {id} = useParams();
     const {user} = useAuth();
     const navigate = useNavigate()
@@ -105,7 +105,7 @@ const BlogPostsPage = () => {
                                 <Typography>{post.shortDescription}</Typography>
                                 <Typography>{post.content}</Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    Author: {post.authorName} | Created: {formatDate(post.createdAt)}}
+                                    Author: {post.authorName} | Created: {formatDate(post.createdAt)}
                                 </Typography>
 
 
@@ -145,5 +145,6 @@ const BlogPostsPage = () => {
         </Container>
     );
 };
+
 
 export default BlogPostsPage;
