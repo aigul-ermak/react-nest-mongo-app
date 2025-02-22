@@ -66,7 +66,7 @@ export class BlogService {
 
     async findPostsForBlog(blogId: string, sortData: SortPostsDto) {
         const page = sortData.page ?? 1;
-        const size = sortData.limit ?? 10;
+        const size = sortData.limit ?? 5;
 
         // Check if blog exists
         const blog = await this.blogQueryRepo.findOne(blogId);

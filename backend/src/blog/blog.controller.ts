@@ -35,7 +35,7 @@ export class BlogController {
                   @Req() req: Request) {
 
         const page = sortData.page || 1;
-        const limit = sortData.limit || 10;
+        const limit = sortData.limit || 5;
         return await this.blogService.findAll(page, limit);
     }
 
