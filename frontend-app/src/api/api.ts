@@ -118,8 +118,19 @@ export const createBlog = async (title: string, description: string) => {
 
 export const updateBlog = async (blogId: string |undefined, title: string, description: string) => {
     try {
-        const response = await api.put(`/blogs/${blogId}`, { title, description });
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+            throw new Error("No refresh token found");
+        }
+
+        const response = await api.put(`/blogs/${blogId}`, { title, description }, {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        });
+
         return response.data;
+
     } catch (error) {
         console.error("Failed to update blog:", error);
         throw error;
@@ -139,9 +150,20 @@ export const getBlogById = async (blogId: string |undefined) => {
 
 export const deleteBlog = async (blogId: string) => {
     try {
-        const response = await api.delete(`/blogs/${blogId}`);
+
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+            throw new Error("No refresh token found");
+        }
+
+        const response = await api.delete(`/blogs/${blogId}`, {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        });
 
         return response.data;
+
     } catch (error) {
 
         throw error;
