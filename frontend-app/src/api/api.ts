@@ -45,6 +45,7 @@ export const getUser = async () => {
     //     return response.data;
 const response = await api.get("/auth/me", {
         headers: {
+            withCredentials: true,
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
         },
