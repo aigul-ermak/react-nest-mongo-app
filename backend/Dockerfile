@@ -5,10 +5,11 @@ FROM node:18
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY backend/package.json ./
+COPY package.json ./
+COPY yarn.lock ./
 
 # Install dependencies
-RUN yarn install --no-bin-links --frozen-lockfile
+RUN yarn install
 
 # Copy the rest of the application code
 COPY . .
