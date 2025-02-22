@@ -14,7 +14,6 @@ async function bootstrap() {
                 "https://react-nest-mongo-app-seven.vercel.app",
             ];
 
-            console.log(`Request Origin: ${origin}`);
 
             if (!origin || origin.startsWith("http://localhost") || allowedOrigins.includes(origin)) {
                 callback(null, true);
@@ -30,7 +29,7 @@ async function bootstrap() {
 
     //const port = configService.get<number>('APP_PORT') || 3000;
     const port = process.env.PORT || 3000;
-    console.log(`App running on port: ${port}`);
+
 
     await app.listen(port);
 }
