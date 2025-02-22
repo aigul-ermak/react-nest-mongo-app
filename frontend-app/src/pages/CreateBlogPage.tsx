@@ -16,6 +16,7 @@ const CreateBlogPage = () => {
 
         try {
             await createBlog(title, description);
+            console.log("Blog created successfully");
             navigate("/"); // Redirect to dashboard after creating a blog
         } catch (err) {
             setError("Failed to create blog. Please try again.");

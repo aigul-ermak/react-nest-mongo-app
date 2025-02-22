@@ -98,10 +98,20 @@ export const getBlogs = async (page: number = 1, limit: number = 5) => {
 
 export const createBlog = async (title: string, description: string) => {
     try {
-        const response = await api.post("/blogs", { title, description });
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+            throw new Error("No refresh token found");
+        }
+
+        const response = await api.post("/blogs", { title, description }, {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        });
+
         return response.data;
     } catch (error) {
-        console.error("Failed to create blog:", error);
+        console.error("Failed to create blog blog:", error);
         throw error;
     }
 };
