@@ -36,7 +36,7 @@ This is a **full-stack web application** built with **NestJS (Backend)** and **R
 Ensure you have the following installed:
 - **Node.js** (v16+)
 - **npm** or **yarn**
-- **MongoDB with MongoDbCompas** (for backend database)
+- **MongoDB Compass** (for backend database)
 - **Postman** (optional for testing API)
 
 ---
@@ -85,7 +85,7 @@ REACT_APP_API_URL=http://localhost:5000
 
 ### ▶️ **Running the Frontend**
 ```bash
-npm start dev
+npm run dev
 ```
 
 ### 🖥️ **Accessing the Application**
