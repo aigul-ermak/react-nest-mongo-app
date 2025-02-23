@@ -66,7 +66,7 @@ yarn start:dev  # Start NestJS in development mode
 
 ### 🐟 **API Documentation (Swagger)**
 Once the backend is running, access **Swagger API documentation**:
-- 📀 **Swagger UI:** [[http://localhost:5000/api](http://localhost:5000/api)](https://react-nest-mongo-app.onrender.com/api)
+- 📀 **Swagger UI:** https://react-nest-mongo-app.onrender.com/api
 
 ---
 
@@ -95,7 +95,7 @@ npm run dev
 
 ### 🖥️ **Accessing the Application**
 Once the frontend is running, open your browser:
-- 📀 **Frontend UI:** [http://localhost:3000](http://localhost:3000)
+
 - 🌍 Frontend UI (Deployed on Vercel): https://react-nest-mongo-app-seven.vercel.app/
 ---
 
