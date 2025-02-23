@@ -1,5 +1,3 @@
-import {BlogDocument} from "../../entities/blog.schema";
-
 export class BlogOutputModel {
     id: string
     title: string

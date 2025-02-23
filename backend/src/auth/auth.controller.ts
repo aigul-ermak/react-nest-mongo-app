@@ -5,6 +5,10 @@ import {UserLoginDto} from "../user/dto/user-login.dto";
 import {Request, Response} from 'express';
 import {RefreshTokenGuard} from "../basics/guards/refresh-token.guard";
 import {JwtAuthGuard} from "../basics/guards/jwtAuthGuard";
+import {ApiOperation, ApiResponse} from "@nestjs/swagger";
+import {LoginResponseDto} from "./dto/login-response.dto";
+import {AuthenticatedUserDto} from "./dto/auth-user.dto";
+import {RegistrationResponseDto} from "./dto/registration-response.dto";
 
 @Controller('auth')
 export class AuthController {
@@ -13,13 +17,18 @@ export class AuthController {
     ) {
     }
 
+    @ApiOperation({summary: 'User login'})
+    @ApiResponse({status: 200, description: 'User logged in', type: LoginResponseDto})
+    @ApiResponse({
+        status: 401,
+        description: 'Unauthorized - Invalid credentials',
+    })
     @Post('/login')
     @HttpCode(200)
     async login(@Body() loginDto: UserLoginDto,
                 @Req() req: Request,
                 @Res() res: Response) {
-        // console.log(loginDto);
-        //const result = await this.authService.login(loginDto.loginOrEmail, loginDto.password);
+
 
         const {
             accessToken,
@@ -37,6 +46,12 @@ export class AuthController {
         return res.json({accessToken, refreshToken});
     }
 
+    @ApiOperation({summary: 'Authenticates a user'})
+    @ApiResponse({status: 200, description: 'Returns authenticated user details', type: AuthenticatedUserDto})
+    @ApiResponse({
+        status: 401,
+        description: 'Unauthorized - User info was not provided or user not found',
+    })
     @Get('/me')
     @HttpCode(200)
     @UseGuards(JwtAuthGuard)
@@ -50,16 +65,20 @@ export class AuthController {
         return this.authService.getUser(userId);
     }
 
-    // @Get()
-    // findAll() {
-    //     return this.authService.findAll();
-    // }
-
-    // @Get(':id')
-    // findOne(@Param('id') id: string) {
-    //     return this.authService.findOne(+id);
-    // }
-
+    @ApiOperation({summary: 'Registers a new user'})
+    @ApiResponse({
+        status: 201,
+        description: 'User successfully registered',
+        type: RegistrationResponseDto,
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Bad Request - Login or Email already exists',
+    })
+    @ApiResponse({
+        status: 401,
+        description: 'Unauthorized - User info was not provided',
+    })
     @Post('/registration')
     @HttpCode(204)
     async registration(
@@ -68,11 +87,16 @@ export class AuthController {
         return this.authService.create(createUserDto);
     }
 
-    // @Delete(':id')
-    // remove(@Param('id') id: string) {
-    //     return this.authService.remove(+id);
-    // }
 
+    @ApiOperation({summary: 'Logs out the user'})
+    @ApiResponse({
+        status: 204,
+        description: 'User successfully logged out',
+    })
+    @ApiResponse({
+        status: 401,
+        description: 'Unauthorized - User info was not provided or session not found',
+    })
     @Post('/logout')
     @HttpCode(204)
     @UseGuards(RefreshTokenGuard)

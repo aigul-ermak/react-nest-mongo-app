@@ -111,11 +111,6 @@ export class BlogService {
             throw new NotFoundException(`Blog not found`);
         }
 
-        // if (!blog.authorId || blog.authorId !== id) {
-        //     throw new NotFoundException(`User not allowed to update this blog`);
-        // }
-
-
         return await this.blogRepo.update(id, updateBlogDto);
     }
 
