@@ -77,17 +77,6 @@ cd frontend
 npm install  
 ```
 
-### ⚙️ **Configuration**
-Create a `.env` file in the **frontend/** directory:
-```ini
-REACT_APP_API_URL=http://localhost:3000
-```
-🐟 API Documentation (Swagger)
-Once the backend is running, access Swagger API documentation:
-
-📀 Swagger UI (Local): http://localhost:3000/api
-🌍 Swagger UI (Deployed): https://react-nest-mongo-app.onrender.com/api
-
 ### ▶️ **Running the Frontend**
 ```bash
 npm run dev
