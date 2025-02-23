@@ -80,8 +80,13 @@ npm install
 ### ⚙️ **Configuration**
 Create a `.env` file in the **frontend/** directory:
 ```ini
-REACT_APP_API_URL=http://localhost:5000
+REACT_APP_API_URL=http://localhost:3000
 ```
+🐟 API Documentation (Swagger)
+Once the backend is running, access Swagger API documentation:
+
+📀 Swagger UI (Local): http://localhost:3000/api
+🌍 Swagger UI (Deployed): https://react-nest-mongo-app.onrender.com/api
 
 ### ▶️ **Running the Frontend**
 ```bash
@@ -91,7 +96,7 @@ npm run dev
 ### 🖥️ **Accessing the Application**
 Once the frontend is running, open your browser:
 - 📀 **Frontend UI:** [http://localhost:3000](http://localhost:3000)
-
+- 🌍 Frontend UI (Deployed on Vercel): https://react-nest-mongo-app-seven.vercel.app/
 ---
 
 ## 📄 **API Endpoints**
@@ -137,12 +142,12 @@ docker-compose up -d
 
 ### **Deploy to Vercel (Frontend)**
 ```bash
-
+🔗 Live URL: [https://<your-vercel-url>](https://react-nest-mongo-app-seven.vercel.app/)
 ```
 
 ### **Deploy to Render (Backend)**
 ```bash
-git push heroku main  # for Heroku
+Live URL: [https://<your-render-url>](https://react-nest-mongo-app.onrender.com)
 ```
 
 ---
